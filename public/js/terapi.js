@@ -11,11 +11,19 @@ var obatAdd         = false;
 var templateStandar = '';
 var url_param       = base + '/terapis/obat/cari/ajax';
 
+
+function prevent(e) {
+	alert('tekan');
+	if (e.keyCode == 13) {
+		e.preventDefault();
+		return false;
+	}
+}
 refreshSelectAjax(base + url_param);
 setTimeout(function(){
 	viewResep();
-	focusObat();
 }, 500);
+focusObat();
 
 function dummySubmit(control){
 	if( !add && !puyer ){
@@ -79,7 +87,7 @@ function viewResep(){
 			temp += '<td>R/</td>';
 			temp += '<td>' + array[i].obat_text+ '</td>';
 			temp += '<td>No ' + array[i].jumlah+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 			temp += '<tr>';
 			temp += '<td></td>';
@@ -97,7 +105,8 @@ function viewResep(){
 			temp += '<td></td>';
 			temp += '<td style="border-bottom:1px solid #000;">Buat menjadi ' + array[i].jumlah + ' puyer</td>';
 			temp += '<td style="border-bottom:1px solid #000;">' + array[i].aturan_minum_text+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button>';
+			temp += '<button type="button" onclick="editRacikan(' + i + ');return false;" class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '3' && ( isset( array[i-1] ) && array[i-1].tipe_resep_id == '3' )){
 			kondisikanSeleksiPuyer();
@@ -107,7 +116,7 @@ function viewResep(){
 			temp += '<td></td>';
 			temp += '<td>' + array[i].obat_text+ '</td>';
 			temp += '<td>No ' + array[i].jumlah+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '3' ){
 			kondisikanSeleksiPuyer();
@@ -117,7 +126,7 @@ function viewResep(){
 			temp += '<td>R/</td>';
 			temp += '<td>' + array[i].obat_text+ '</td>';
 			temp += '<td>No ' + array[i].jumlah+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '2' && ( isset( array[i-1] ) && array[i-1].tipe_resep_id == '2' ) && array[i].obat_id == '2'  ){
 			finishAdd   = true;
@@ -130,7 +139,8 @@ function viewResep(){
 			temp += '<td></td>';
 			temp += '<td style="border-bottom:1px solid #000;">S masukkan ke dalam sirup  ' + array[i].signa_text + '</td>';
 			temp += '<td style="border-bottom:1px solid #000;">' + array[i].aturan_minum_text+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button>';
+			temp += '<button type="button" onclick="editRacikan(' + i + ');return false;" class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '2' && ( isset( array[i-1] ) && array[i-1].tipe_resep_id == '2' )){
 			kondisikanSeleksiAdd();
@@ -140,7 +150,7 @@ function viewResep(){
 			temp += '<td></td>';
 			temp += '<td>' + array[i].obat_text+ '</td>';
 			temp += '<td>No ' + array[i].jumlah+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '2' ){
 			kondisikanSeleksiAdd();
@@ -154,7 +164,7 @@ function viewResep(){
 			temp += '<td>R/</td>';
 			temp += '<td>' + array[i].obat_text+ '</td>';
 			temp += '<td>fls No. ' + array[i].jumlah+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span	</button></td>';
+			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button></td>';
 			temp += '</tr>';
 			temp += '<tr>';
 			temp += '<td colspan="3" style="text-align:center">ADD</td>';
@@ -173,6 +183,7 @@ function rowDel(i){
 	viewResep();
 }
 function tipeResepChange(control){
+	$('#nama_obat_ajax_search').empty();
 	if ( $(control).val() == '3' ) {
 		kondisikanSeleksiPuyer();
 		gantiSeleksiPuyer();
@@ -199,8 +210,10 @@ function inputNotEmpty(){
 }
 
 function focusObat(){
-	$('#nama_obat_ajax_search').select2('open');
-	$(document).scrollTop($(document).height());
+	setTimeout(function() {
+		$('#nama_obat_ajax_search').select2('open');
+		$(document).scrollTop($(document).height());
+	}.bind(this), 100);
 }
 
 function endPuyer(){
@@ -224,17 +237,18 @@ function isset(ref) { return typeof ref !== 'undefined' }
 function ubahFormatSelection(){
 	if (puyer) {
 		gantiSeleksiPuyer();
-		focusObat();
 	} else if( add ){
 		gantiSeleksiAdd();
-		focusObat();
 	} else {
 		gantiSeleksiStandar();
 	}
+	focusObat();
 }
 function gantiSeleksiPuyer(){
 	obatAdd   = false;
 	obatStandar = false;
+	$('#tipe_resep').val('3');
+	
 	if ( $('#tipe_resep').closest('.form-group').is(':visible') ) {
 		$('#tipe_resep').closest('.form-group').fadeOut('slow', function(){
 			if (rowDelete) {
@@ -252,6 +266,7 @@ function gantiSeleksiPuyer(){
 			}
 		});
 	}
+	 // $('#tipe_resep').val('3');
 	if (!obatPuyer) {
 		obatPuyer = true;
 		$('#nama_obat_ajax_search').empty();
@@ -293,6 +308,7 @@ function gantiSeleksiAdd(){
 			}
 		});
 	}
+	 // $('#tipe_resep').val('2');
 	if (!obatAdd) {
 		obatAdd = true;
 		$('#nama_obat_ajax_search').empty();
@@ -457,7 +473,7 @@ function kembaliKeStandar() {
 	if ( $('#jumlah').is(':hidden')) {
 		$('#jumlah').fadeIn('slow');
 	}
-	focusObat;
+	focusObat();
 }
 function munculkanKembaliResepStandar() {
 	if ( $('#kembaliResepStandar').is(':hidden') ) {
@@ -501,4 +517,25 @@ function setValueNamaObatThenReadOnly( text_select, i ){
 	$("#nama_obat_ajax_search").append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
 	$("#nama_obat_ajax_search").val(i).trigger('change');
 	$('#nama_obat_ajax_search').attr('disabled', 'disabled').trigger('change');
+}
+function editRacikan(i) {
+	rowDelete = true;
+	data            = [];
+	// ambil baris array dengan tipe_resep yang sama mulai dari baris tombol ditekan ke atas
+	while ( array[i]['tipe_resep_id'] == '3' ) {
+		data.push(array[i]);
+		i--;
+	}
+	// sebelum data dimasukkan, hapus dulu baris array yang akan dipindah
+	array.splice(i + 1, data.length);
+	// balik array sehingga baris array tombol yang ditekan menjadi yang terakhir lagi
+	data.reverse();
+	// hapus baris array tombol yang ditekan untuk menampilkan form racikan
+	data.splice(data.length - 1, 1);
+	// masukkan data ke array baris terakhir berurutan
+	for (var i = 0, len = data.length; i < len; i++) {
+		array.push(data[i]);
+	}
+	//tampilkan view
+	viewResep();
 }

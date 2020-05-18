@@ -51,7 +51,7 @@ class TerapiController extends Controller
 		$periksa       = Periksa::find( $nurse_station->periksa_id );
 		$terapi        = Terapi::where('periksa_id', $nurse_station->periksa_id)->get();
 		$json_terapi   = [];
-
+		
 		foreach ($terapi as $t) {
 			$obat = Obat::find( $t->obat_id );
 			$json_terapi[] = [

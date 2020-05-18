@@ -49,7 +49,7 @@ class NurseStationController extends Controller
 		$nurse_station->pasien_id            = $daftar->pasien_id;
 		$nurse_station->staf_id              = $daftar->staf_id;
 		$nurse_station->waktu                = $daftar->waktu;
-		if ( !empty( Input::get('hamil') ) ) {
+		if ( is_numeric( Input::get('hamil') ) ) {
 			$nurse_station->hamil            = Input::get('hamil');
 		}
 		$nurse_station->tinggi_badan         = Input::get('tinggi_badan');

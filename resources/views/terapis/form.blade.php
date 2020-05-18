@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				@include('periksas.imagePasien', ['pasien_id' => $nurse_station->pasien_id])
+				{{-- @include('periksas.imagePasien', ['pasien_id' => $nurse_station->pasien_id]) --}}
 			</div>
 		</div>
 	</div>
@@ -110,7 +110,7 @@
 					<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 						<div class="form-group @if($errors->has('jumlah'))has-error @endif">
 							{!! Form::text('jumlah', null, array(
-								'class'       => 'form-control selectpick jumlah',
+								'class'       => 'form-control selectpick jumlah disableEnter',
 								'id'          => 'jumlah',
 								'placeholder' => 'Jumlah'
 							))!!}

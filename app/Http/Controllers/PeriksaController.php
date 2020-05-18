@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Periksa;
 use App\NurseStation;
@@ -46,10 +45,7 @@ class PeriksaController extends Controller
 	public function edit($id){
 		$periksa              = Periksa::with('pasien.alergi', 'nurseStation')->where('id',$id)->first();
 		$tindakans            = TransaksiPeriksa::where('nurse_station_id', $periksa->nurse_station_id)->get();
-		$periksa_last         = Periksa::where('pasien_id', $periksa->pasien_id)->latest()->limit(2)->get();
-		if ( !isset($periksa_last[1]) ) {
-			$periksa_last = null;
-		}
+		$periksa_last         = Periksa::where('pasien_id', $periksa->pasien_id)->whereNotNull('random_string')->latest()->limit(2)->first();
 		$nurse_station        = NurseStation::find($periksa->nurse_station_id);
 		$tarif_selection      = Tarif::selectList( $nurse_station->asuransi_id );
 		$tarif_id_jasa_dokter = Tarif::where('jenis_tarif_id', 1)->where('user_id', Auth::id())->where('asuransi_id', $nurse_station->asuransi_id)->first()->id;

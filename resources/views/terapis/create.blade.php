@@ -21,7 +21,10 @@
 </ol>
 @stop
 @section('content') 
-	{!! Form::open(['url' => 'home/terapis', 'method' => 'post']) !!}
+	{!! Form::open([
+		'url'       => 'home/terapis',
+		'method'    => 'post'
+	]) !!}
 		@include('terapis.form')
 	{!! Form::close() !!}
 @stop

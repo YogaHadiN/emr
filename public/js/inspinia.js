@@ -1,6 +1,12 @@
 // Custom script
 $(document).ready(function () {
 	// ganti_gambar_jika_rusak();
+	$('form .disableEnter').keydown(function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			return false;
+		}
+	});
 	$('.carousel').carousel({
 		interval: false
 	});
