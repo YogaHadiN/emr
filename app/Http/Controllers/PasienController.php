@@ -17,6 +17,58 @@ use File;
 
 class PasienController extends Controller
 {
+		public $input_nama;
+		public $input_asuransi_id;
+		public $input_nama_peserta;
+		public $input_nomor_asuransi;
+		public $input_jenis_peserta_id;
+		public $input_alamat;
+		public $input_sex;
+		public $input_tanggal_lahir;
+		public $input_no_ktp;
+		public $input_no_telp;
+		public $input_nama_ayah;
+		public $input_nama_ibu;
+		public $input_riwayat_alergi_obat;
+		public $input_riwayat_penyakit_dahulu;
+		public $input_image;
+		public $input_ktp_image;
+		public $input_email;
+		public $input_bpjs_image;
+		public $input_nomor_asuransi_bpjs;
+		public $input_nomor_ktp;
+		private $random_string;
+	/**
+	* @param 
+	*/
+	public function __construct()
+	{
+		$this->input_nama                    = Input::get('nama');
+		$this->input_asuransi_id             = Input::get('asuransi_id');
+		$this->input_nama_peserta            = Input::get('nama_peserta');
+		if ($this->input_asuransi_id > 1 && empty($this->input_nama_peserta)) {
+			$this->input_nama_peserta        = $this->input_nama;
+		}
+		$this->input_nomor_asuransi          = Input::get('nomor_asuransi');
+		$this->input_jenis_peserta_id        = Input::get('jenis_peserta_id');
+		$this->input_alamat                  = Input::get('alamat');
+		$this->input_sex                     = Input::get('sex');
+		$this->input_tanggal_lahir           = Yoga::datePrep(Input::get('tanggal_lahir'));
+		$this->input_no_ktp                  = Input::get('no_ktp');
+		$this->input_no_telp                 = Input::get('no_telp');
+		$this->input_nama_ayah               = Input::get('nama_ayah');
+		$this->input_nama_ibu                = Input::get('nama_ibu');
+		$this->input_riwayat_alergi_obat     = Input::get('riwayat_alergi_obat');
+		$this->input_riwayat_penyakit_dahulu = Input::get('riwayat_penyakit_dahulu');
+		$this->input_image                   = Input::get('image');
+		$this->input_ktp_image               = Input::get('ktp_image');
+		$this->input_email                   = Input::get('email');
+		$this->input_bpjs_image              = Input::get('bpjs_image');
+		$this->input_nomor_asuransi_bpjs     = Input::get('nomor_asuransi_bpjs');
+		$this->input_nomor_ktp               = Input::get('nomor_ktp');
+		$this->random_string                 = Input::get('random_string');
+	}
+	
 	public function index(){
 
 		$ps               = new Pasien;
@@ -40,10 +92,8 @@ class PasienController extends Controller
 	}
 
 	public function create(){
-		$url    = url('/home/pasiens/image');
-
+		$url           = url('/home/pasiens/image');
 		$random_string = substr(str_shuffle(MD5(microtime())), 0, 10);
-
 		$asuransis     = Asuransi::where('user_id', Auth::id())->pluck('nama_asuransi', 'id');
 		$asuransis[1]  = 'Tidak Ada Asuransi';
 		return view('pasiens.create', compact(
@@ -54,6 +104,7 @@ class PasienController extends Controller
 	}
 
 	public function store(){
+			dd(Input::all()); 
 		$messages = [
 
 			'required' => ':attribute Harus Diisi',
@@ -71,58 +122,9 @@ class PasienController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 
-		$pasien                         = new Pasien;
-		$pasien->nama                    = Input::get('nama');
-		$pasien->asuransi_id             = Input::get('asuransi_id');
-		if ($pasien->asuransi_id > 1 && empty(Input::get('nama_peserta'))) {
-			$nama_peserta = $pasien->nama;	
-		} else {
-			$nama_peserta = Input::get('nama_peserta');
-		}
-		$pasien->nama_peserta            = $nama_peserta;
-		$pasien->nomor_asuransi          = Input::get('nomor_asuransi');
-		$pasien->jenis_peserta_id        = Input::get('jenis_peserta_id');
-		$pasien->alamat                  = Input::get('alamat');
-		$pasien->sex                     = Input::get('sex');
-		$pasien->tanggal_lahir           = Yoga::datePrep(Input::get('tanggal_lahir'));
-		$pasien->no_ktp                  = Input::get('no_ktp');
-		$pasien->no_telp                 = Input::get('no_telp');
-		$pasien->nama_ayah               = Input::get('nama_ayah');
-		$pasien->nama_ibu                = Input::get('nama_ibu');
-		$pasien->riwayat_alergi_obat     = Input::get('riwayat_alergi_obat');
-		$pasien->riwayat_penyakit_dahulu = Input::get('riwayat_penyakit_dahulu');
-		$pasien->image                   = Input::get('image');
-		$pasien->ktp_image               = Input::get('ktp_image');
-		$pasien->email                   = Input::get('email');
-		$pasien->bpjs_image              = Input::get('bpjs_image');
-		$pasien->nomor_asuransi_bpjs     = Input::get('nomor_asuransi_bpjs');
-		$pasien->nomor_ktp               = Input::get('nomor_ktp');
-		$pasien->user_id                 = Auth::id();
+		$pasien = new Pasien;
+		$pasien = $this->inputData($pasien);
 		$pasien->save();
-		$random_string = Input::get('random_string');
-
-		$filename = 'pasien-' . $random_string . '.jpg';
-		$filenametostore = 'pasiens/pasien' . $pasien->id .'.jpg';
-		if (Storage::disk('local')->has($filename)) {
-			$this->storeImage($filename, $filenametostore);
-			$pasien->image                   = $filenametostore;
-			$pasien->save();
-		}
-
-		$filename = 'ktp-' . $random_string . '.jpg';
-		if (Storage::disk('local')->has($filename)) {
-			$filenametostore = 'pasiens/ktp' . $pasien->id .'.jpg';
-			$this->storeImage($filename, $filenametostore);
-			$pasien->ktp_image                   = $filenametostore;
-			$pasien->save();
-		}
-		$filename = 'bpjs-' . $random_string . '.jpg';
-		if (Storage::disk('local')->has($filename)) {
-			$filenametostore = 'pasiens/bpjs' . $pasien->id .'.jpg';
-			$this->storeImage($filename, $filenametostore);
-			$pasien->bpjs_image                   = $filenametostore;
-			$pasien->save();
-		}
 		$pesan = Yoga::suksesFlash('Pasien '. $pasien->id . '-' . $pasien->nama . ' <strong>BERHASIL</strong> diubah');
 		return redirect('home/pasiens')->withPesan($pesan);
 	}
@@ -145,44 +147,9 @@ class PasienController extends Controller
 		{
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
-
-		$pasien                         = Pasien::find($id);
-		$pasien->nama                    = Input::get('nama');
-		$pasien->asuransi_id             = Input::get('asuransi_id');
-		if ($pasien->asuransi_id > 1 && empty(Input::get('nama_peserta'))) {
-			$nama_peserta = $pasien->nama;	
-		} else {
-			$nama_peserta = Input::get('nama_peserta');
-		}
-		$pasien->nama_peserta            = $nama_peserta;
-		$pasien->nomor_asuransi          = Input::get('nomor_asuransi');
-		$pasien->jenis_peserta_id        = Input::get('jenis_peserta_id');
-		$pasien->alamat                  = Input::get('alamat');
-		$pasien->sex                     = Input::get('sex');
-		$pasien->tanggal_lahir           = Yoga::datePrep(Input::get('tanggal_lahir'));
-		$pasien->no_ktp                  = Input::get('no_ktp');
-		$pasien->no_telp                 = Input::get('no_telp');
-		$pasien->nama_ayah               = Input::get('nama_ayah');
-		$pasien->nama_ibu                = Input::get('nama_ibu');
-		$pasien->riwayat_alergi_obat     = Input::get('riwayat_alergi_obat');
-		$pasien->riwayat_penyakit_dahulu = Input::get('riwayat_penyakit_dahulu');
-		$pasien->image                   = Input::get('image');
-		$pasien->ktp_image               = Input::get('ktp_image');
-		$pasien->email                   = Input::get('email');
-		$pasien->bpjs_image              = Input::get('bpjs_image');
-		$pasien->nomor_asuransi_bpjs     = Input::get('nomor_asuransi_bpjs');
-		$pasien->nomor_ktp               = Input::get('nomor_ktp');
-		$pasien->jangan_disms            = Input::get('jangan_disms');
-		$pasien->user_id                 = Auth::id();
+		$pasien = Pasien::find($id);
+		$pasien = $this->inputData($pasien);
 		$pasien->save();
-
-		$filename = 'pasien-' . Input::get('random_string') . '.jpg';
-		if (Storage::disk('local')->has($filename)) {
-			$cloud_filename = 'pasien' . $pasien->id .'.jpg';
-			Storage::disk('s3')->put( 'pasiens/' . $cloud_filename,  Storage::disk('local')->get($filename) );
-			$pasien->image                   = $cloud_filename;
-			$pasien->save();
-		}
 		$pesan = Yoga::suksesFlash('Pasien '. $pasien->id . '-' . $pasien->nama . ' <strong>BERHASIL</strong> diubah');
 		return redirect('home/pasiens')->withPesan($pesan);
 	}
@@ -404,4 +371,54 @@ class PasienController extends Controller
 			'pasien'
 		));
 	}
+	/**
+	* undocumented function
+	*
+	* @return void
+	*/
+	private function inputData($pasien)
+	{
+		$pasien->nama                 = $this->input_nama;
+		$pasien->asuransi_id             = $this->input_asuransi_id;
+		$pasien->nama_peserta            = $this->input_nama_peserta;
+		$pasien->nomor_asuransi          = $this->input_nomor_asuransi;
+		$pasien->jenis_peserta_id        = $this->input_jenis_peserta_id;
+		$pasien->alamat                  = $this->input_alamat;
+		$pasien->sex                     = $this->input_sex;
+		$pasien->tanggal_lahir           = $this->input_tanggal_lahir;
+		$pasien->no_ktp                  = $this->input_no_ktp;
+		$pasien->no_telp                 = $this->input_no_telp;
+		$pasien->nama_ayah               = $this->input_nama_ayah;
+		$pasien->nama_ibu                = $this->input_nama_ibu;
+		$pasien->riwayat_alergi_obat     = $this->input_riwayat_alergi_obat;
+		$pasien->riwayat_penyakit_dahulu = $this->input_riwayat_penyakit_dahulu;
+		$pasien->image                   = $this->input_image;
+		$pasien->ktp_image               = $this->input_ktp_image;
+		$pasien->email                   = $this->input_email;
+		$pasien->bpjs_image              = $this->input_bpjs_image;
+		$pasien->nomor_asuransi_bpjs     = $this->input_nomor_asuransi_bpjs;
+		$pasien->nomor_ktp               = $this->input_nomor_ktp;
+		$pasien->user_id                 = Auth::id();
+		$pasien->save();
+		$pasien = $this->imageStore($pasien, 'pasien', 'pasiens/pasien');
+		$pasien = $this->imageStore($pasien, 'ktp', 'pasiens/ktp');
+		$pasien = $this->imageStore($pasien, 'bpjs', 'pasiens/bpjs');
+		return $pasien;
+	}
+	/**
+	* undocumented function
+	*
+	* @return void
+	*/
+	private function imageStore($pasien, $prefix)
+	{
+		$filename = $prefix . '-' . $this->random_string . '.jpg';
+		if (Storage::disk('local')->has($filename)) {
+			$filenametostore = 'pasiens/' . $prefix . $pasien->id .'.jpg';
+			$this->storeImage($filename, $filenametostore);
+			$pasien->image   = $filenametostore;
+		}
+		return $pasien;
+	}
+	
 }
