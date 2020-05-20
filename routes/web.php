@@ -33,6 +33,7 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::get('home/nurse_stations/{id}/periksa/terapi', 'TerapiController@create');
 	Route::get('terapis/obat/cari/ajax', 'TerapiController@obatAjax');
 	Route::get('terapis/obat/cari/ajax/{jenis_obat}', 'TerapiController@obatAjaxCustom');
+	Route::get('home/terapis/signa/ajax/search', 'TerapiController@signaSearch');
 
 	Route::resource('home/terapis', 'TerapiController');
 	Route::post('home/antrian_apoteks/{id}/kembalikan', 'AntrianApotekController@kembalikan');
@@ -48,6 +49,8 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::get('home/kasirs/{id}/create', 'KasirController@create');
 	Route::get('periksa/icd/cari', 'PeriksaController@icdCari');
 	Route::get('periksa/diagnosa/cari', 'PeriksaController@diagnosaCari');
+	Route::get('periksa/tindakan/cari/{asuransi_id}', 'PeriksaController@tindakanCari');
+
 	Route::get( 'periksa/pilih/diagnosa/fromIcd', 'PeriksaController@pilihDiagnosa');
 	Route::post( 'periksas/diagnosa/baru', 'PeriksaController@diagnosaBaru');
 	Route::get('periksa/generik/cari', 'PeriksaController@cariGenerik');

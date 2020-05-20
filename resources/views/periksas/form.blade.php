@@ -3,9 +3,9 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						@if( isset($periksa) )
-							@include('periksas.imagePasien', ['pasien_id' => $periksa->pasien_id])
+							@include('periksas.imagePasien', ['pasien' => $periksa->pasien,  'temp' => 'image'])
 						@else
-							@include('periksas.imagePasien', ['pasien_id' => $nurse_station->pasien_id])
+							@include('periksas.imagePasien', ['pasien' => $nurse_station->pasien,  'temp' => 'image'])
 						@endif
 						@if( isset($periksa) )
 							<h1>{{ $periksa->pasien->nama }}</h1>
@@ -206,7 +206,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-2">
 				<div class="form-group @if($errors->has('sistolik'))has-error @endif">
 					{!! Form::label('sistolik', 'Sistolik', ['class' => 'control-label']) !!}
 					  <div class="input-group">
@@ -224,7 +224,7 @@
 					@if($errors->has('sistolik'))<code>{{ $errors->first('sistolik') }}</code>@endif
 				</div>
 			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-2">
 				<div class="form-group @if($errors->has('diastolik'))has-error @endif">
 					{!! Form::label('diastolik', 'Diastolik', ['class' => 'control-label']) !!}
 					  <div class="input-group">
@@ -242,7 +242,7 @@
 					@if($errors->has('diastolik'))<code>{{ $errors->first('diastolik') }}</code>@endif
 				</div>
 			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-2">
 				<div class="form-group @if($errors->has('berat_badan'))has-error @endif">
 					{!! Form::label('berat_badan', 'Berat Badan', ['class' => 'control-label']) !!}
 					  <div class="input-group">
@@ -260,7 +260,7 @@
 					@if($errors->has('berat_badan'))<code>{{ $errors->first('berat_badan') }}</code>@endif
 				</div>
 			</div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-2">
 				<div class="form-group @if($errors->has('hamil'))has-error @endif">
 					{!! Form::label('hamil', 'Hamil', ['class' => 'control-label']) !!}
 					@if( isset($periksa) )
@@ -275,43 +275,10 @@
 					@if($errors->has('hamil'))<code>{{ $errors->first('hamil') }}</code>@endif
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<div class="form-group @if($errors->has('pemeriksaan_penunjang'))has-error @endif">
-				  {!! Form::label('pemeriksaan_penunjang', 'Pemeriksaan Penunjang/Tindakan', ['class' => 'control-label']) !!}
-					@if( isset($periksa) )
-						<a href="{{ url('home/transaksi_periksas/' . $periksa->nurse_station_id . '/create') }}">Tambah</a>
-					@else
-					@endif
-				  <div class="table-responsive">
-					<table class="table table-hover table-condensed table-bordered">
-						<thead>
-							<tr>
-								<th>Tindakan</th>
-								<th>Keterangan</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody id="tindakan_table">
-							@if( $tindakans->count() )
-								@foreach($tindakans as $k => $tindakan)	
-									@include('periksas.tindakan', [
-										'tarif_id'    => $tindakan->tarif_id,
-										'keterangan'  => $tindakan->keterangan_pemeriksaan,
-										'k'           => $k,
-										'asuransi_id' => $periksa->asuransi_id
-									])
-								@endforeach
-							@else
-								@include('periksas.tindakan', [
-									'tarif_id'    => $tarif_id_jasa_dokter,
-									'keterangan'  => null,
-									'asuransi_id' => $nurse_station->asuransi_id
-								])
-							@endif
-						</tbody>
-					</table>
-				  </div>
-				  @if($errors->has('pemeriksaan_penunjang'))<code>{{ $errors->first('pemeriksaan_penunjang') }}</code>@endif
+			<div class="col-xs-12 col-sm-12 col-md-2">
+				<div class="form-group @if($errors->has('hamil'))has-error @endif">
+					{!! Form::label('penunjang', '', ['class' => 'control-label']) !!}
+					<button class="btn btn-primary" onclick="showPenunjangTindakan();return false;" type='button'><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Input Penunjang dan Tindakan</button>
 				</div>
 			</div>
 		</div>

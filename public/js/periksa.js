@@ -268,3 +268,98 @@ function resetOption(){
 function jumlahBaris(control) {
 	 return control.closest('tbody').find('tr').length;
 }
+function showPenunjangTindakan() {
+	$('.show_tab_diagnosa').tab('show');
+}
+function removeAlergi(control){
+	var id = $(control).closest('tr').find('.id').html();
+	var generik = $(control).closest('tr').find('.generik').html();
+	var pasien_id = $('#pasien_id').val();
+	if (confirm( 'Apa Anda yakin mau menghapus ' + generik + ' dari daftar alergi pasien ini?' )) {
+		$.post(base + '/alergies/hapus',
+			{ 
+				id:        id,
+				pasien_id: pasien_id
+			},
+			function (data, textStatus, jqXHR) {
+				console.log('data keluar');
+				console.log(jumlahBaris($(control)) < 2);
+				console.log( $.trim( data ) != '' );
+				if (jumlahBaris( $(control) )< 2) {
+					console.log('this is it');
+					$(control).closest('tr').html(
+						'<td class="text-center" colspan="2">Tidak ada data</td>'
+					);
+				} else {
+					$(control).closest('tr').remove();
+				}
+				resetOption();
+			}
+		);
+	}
+}
+function submitAlergi(control){
+	var generik_id = $('#select_generik_id').val();
+	var pasien_id = $('#pasien_id').val();
+	$.post(base + '/periksas/alergi/tambah',
+		{ 
+			generik_id : generik_id,
+			pasien_id : pasien_id
+		},
+		function (data, textStatus, jqXHR) {
+			refreshDataAlergi(data);
+			$(control).closest('tr').find('.dropdown-toggle').focus();
+		}
+	);
+}
+function changeGenerik(control){
+	if ( $(control).val() == '' ) {
+		if ( !$('#submit_alergi').hasClass('disabled') ) {
+			 $('#submit_alergi').addClass('disabled');
+		}
+	} else {
+		if ( $('#submit_alergi').hasClass('disabled') ) {
+			 $('#submit_alergi').removeClass('disabled');
+		}
+	}
+}
+function refreshDataAlergi(data){
+	if (data.length > 0) {
+		var temp = '';
+		for (var i = 0, len = data.length; i < len; i++) {
+			temp += '<tr>';
+			temp += '<td class="id hide">';
+			temp += data[i].id;
+			temp += '</td>';
+			temp += '<td class="generik_id hide">';
+			temp += data[i].generik_id;
+			temp += '</td>';
+			temp += '<td class="generik">';
+			temp += data[i].generik;
+			temp += '</td>';
+			temp += '<td>';
+			temp += '<button type="button" class="btn btn-danger" onclick="removeAlergi(this);return false;"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</button>';
+			temp += '</td>';
+			temp += '</tr>';
+		}
+		$('#alergi_container').html(temp);
+	} else {
+		$('#alergi_container').html('<tr><td class="text-center" colspan="2">Tidak ada data</td></tr>');
+	}
+	resetOption();
+
+}
+function resetOption(){
+	$('#select_generik_id').empty();
+	if ( !$('#submit_alergi').hasClass('disabled') ) {
+		 $('#submit_alergi').addClass('disabled');
+	}
+}
+function jumlahBaris(control) {
+	 return control.closest('tbody').find('tr').length;
+}
+function showPenunjangTindakan() {
+	$('.show_tab_pemeriksaan_penunjang').tab('show');
+	$(window).scrollTop(0);
+    return false;
+}

@@ -83,6 +83,7 @@ class KasirController extends Controller
 			$periksa->nota       = json_encode( $nota );
 			$periksa->pembayaran = Input::get('pembayaran');
 			$periksa->kembalian  = Input::get('kembalian');
+			$periksa->postKasir  = 1;
 			$periksa->save();
 
 			foreach ($periksa->terapis as $terapi) {

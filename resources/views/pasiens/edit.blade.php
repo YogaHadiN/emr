@@ -32,7 +32,6 @@ Online Electronic Medical Record | Pasien
 	<script type="text/javascript" charset="utf-8">
 		var random_string = "{{ $random_string }}";
 	</script>
-
 {!! HTML::script('js/pasien_edit.js')!!}
 {!! HTML::script('js/app.js')!!}
  

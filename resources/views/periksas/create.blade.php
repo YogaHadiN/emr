@@ -22,11 +22,11 @@ Online Electronic Medical Record | Pemeriksaan {{ ucfirst( $nurse_station->poli-
 </ol>
 @stop
 @section('content') 
-	@include('periksas.pre_tab')
 	{!! Form::open(['url' => 'home/periksas', 'method' => 'post']) !!}
+		@include('periksas.pre_tab')
 		@include('periksas.form')
+		@include('periksas.post_tab')
 	{!! Form::close() !!}
-	@include('periksas.post_tab')
 @stop
 @section('footer') 
 	<script src="{!! url('js/periksa.js') !!}"></script>

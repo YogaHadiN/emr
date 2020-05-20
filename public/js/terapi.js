@@ -1,4 +1,6 @@
+
 var array           = JSON.parse( $('#json_container').val() );
+// var array           = [];
 var data;
 var puyer           = false;
 var add             = false;
@@ -11,6 +13,51 @@ var obatAdd         = false;
 var templateStandar = '';
 var url_param       = base + '/terapis/obat/cari/ajax';
 
+$('#nama_obat_ajax_search').select2({
+	width: '100%',
+	theme: "bootstrap",
+	ajax: {
+		url: function() {
+			return getUrl();
+		},
+		dataType: 'json',
+		// delay: 100,	
+		data: function (params) {
+		  return {
+			q: params.term, // search term
+			page: params.page
+		  };
+		},
+		processResults: function (data, params) {
+		  // parse the results into the format expected by Select2
+		  // since we are using custom formatting functions we do not need to
+		  // alter the remote JSON data, except to indicate that infinite
+		  // scrolling can be used
+		  params.page = params.page || 1;
+
+		  return {
+			results: data,
+			pagination: {
+			  more: (params.page * 30) < data.total_count
+			}
+		  };
+		},
+		cache: true
+	},
+	placeholder: 'Pilih Merek...',
+	minimumInputLength: 1,
+	dropdownPosition: 'below',
+	selectOnClose: true,
+	escapeMarkup: function(markup) {
+		return markup;
+	},
+	templateResult: function(data) {
+		return data.html;
+	},
+	templateSelection: function(data) {
+		return data.text;
+	}
+});
 
 function prevent(e) {
 	alert('tekan');
@@ -19,7 +66,6 @@ function prevent(e) {
 		return false;
 	}
 }
-refreshSelectAjax(base + url_param);
 setTimeout(function(){
 	viewResep();
 }, 500);
@@ -394,53 +440,6 @@ function gantiObatKeKapsulDanTablet(){
 function getUrl() {
 	return url_param;
 }
-function refreshSelectAjax(urlParam) {
-	$('#nama_obat_ajax_search').select2({
-		width: '100%',
-		theme: "bootstrap",
-		ajax: {
-			url: function() {
-				return getUrl();
-			},
-			dataType: 'json',
-			// delay: 100,	
-			data: function (params) {
-			  return {
-				q: params.term, // search term
-				page: params.page
-			  };
-			},
-			processResults: function (data, params) {
-			  // parse the results into the format expected by Select2
-			  // since we are using custom formatting functions we do not need to
-			  // alter the remote JSON data, except to indicate that infinite
-			  // scrolling can be used
-			  params.page = params.page || 1;
-
-			  return {
-				results: data,
-				pagination: {
-				  more: (params.page * 30) < data.total_count
-				}
-			  };
-			},
-			cache: true
-		},
-		placeholder: 'Pilih Merek...',
-		minimumInputLength: 1,
-		dropdownPosition: 'below',
-		selectOnClose: true,
-		escapeMarkup: function(markup) {
-			return markup;
-		},
-		templateResult: function(data) {
-			return data.html;
-		},
-		templateSelection: function(data) {
-			return data.text;
-		}
-	});
-}
 function kembaliResepStandar() {
 	$('#selesaikanAdd').fadeOut('slow');
 	$('#nama_obat_ajax_search').val('2').selectpicker('refresh').closest('.form-group').fadeOut('slow');
@@ -538,4 +537,29 @@ function editRacikan(i) {
 	}
 	//tampilkan view
 	viewResep();
+}
+function showSignaTab() {
+	$('.show_tab_signa').tab('show');
+}
+function showAturanMinumTab() {
+	$('.show_tab_aturan_minum').tab('show');
+}
+function signaSearch(control) {
+	$.get(base + '/home/terapis/signa/ajax/search',
+		{ 'param' : $(control).val()  },
+		function (data, textStatus, jqXHR) {
+			data = $.trim(data);
+			var temp = '';
+			if (data.length > 0) {
+				// permainkan button create signa
+			}
+			for (var i = 0, len = data.length; i < len; i++) {
+				temp += '<tr>';
+				temp += '<td class="signa">' + data[i]['signa'] + '</td>';
+				temp += '<td class="action"><button class="btn btn-info btn-sm" class="pilihSigna(' + data[i]['id'] + ')">Pilih</button></td>';
+				temp += '</tr>';
+			}
+			$('#signa_ajax_container').html(temp);
+		}
+	);
 }

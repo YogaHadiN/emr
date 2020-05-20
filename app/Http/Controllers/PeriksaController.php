@@ -28,7 +28,7 @@ class PeriksaController extends Controller
 		if ( !is_null($nurse_station->random_string) ) {
 			return redirect('home/periksas/' . $nurse_station->periksa_id . '/edit');
 		}
-		$periksa_last         = Periksa::where('pasien_id', $nurse_station->pasien_id)->latest()->first();
+		$periksa_last         = $this->periksaLast($nurse_station);
 		$tindakans            = TransaksiPeriksa::where('nurse_station_id', $id)->get();
 		$tarif_id_jasa_dokter = Tarif::where('jenis_tarif_id', 1)->where('user_id', Auth::id())->where('asuransi_id', $nurse_station->asuransi_id)->first()->id;
 		$tarif_selection      = Tarif::selectList( $nurse_station->asuransi_id );
@@ -45,7 +45,7 @@ class PeriksaController extends Controller
 	public function edit($id){
 		$periksa              = Periksa::with('pasien.alergi', 'nurseStation')->where('id',$id)->first();
 		$tindakans            = TransaksiPeriksa::where('nurse_station_id', $periksa->nurse_station_id)->get();
-		$periksa_last         = Periksa::where('pasien_id', $periksa->pasien_id)->whereNotNull('random_string')->latest()->limit(2)->first();
+		$periksa_last         = $this->periksaLast($periksa);
 		$nurse_station        = NurseStation::find($periksa->nurse_station_id);
 		$tarif_selection      = Tarif::selectList( $nurse_station->asuransi_id );
 		$tarif_id_jasa_dokter = Tarif::where('jenis_tarif_id', 1)->where('user_id', Auth::id())->where('asuransi_id', $nurse_station->asuransi_id)->first()->id;
@@ -380,4 +380,29 @@ class PeriksaController extends Controller
 			return $data;
 		}
 	}
+	/**
+	* undocumented function
+	*
+	* @return void
+	*/
+	private function periksaLast($nurse_station)
+	{
+		return Periksa::where('pasien_id', $nurse_station->pasien_id)->where('postKasir' , '1')->latest()->first();
+	}
+	/**
+	* cari tindakan dengan ajax
+	*
+	* @return array
+	*/
+	public function tindakanCari($asuransi_id)
+	{
+		$param = Input::get('q');
+		$query  = "SELECT id, generik as text ";
+		$query .= "FROM generiks ";
+		$query .= "WHERE generik like '%{$param}%' ";
+		$query .= "LIMIT 15;";
+		return DB::select($query);
+	}
+
+			
 }

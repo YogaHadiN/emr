@@ -23,11 +23,11 @@
 </ol>
 @stop
 @section('content') 
-	@include('periksas.pre_tab')
 	{!! Form::model($periksa,['url' => 'home/periksas/' . $periksa->id, 'method' => 'put']) !!}
+		@include('periksas.pre_tab')
 		@include('periksas.form')
+		@include('periksas.post_tab')
 	{!! Form::close() !!}
-	@include('periksas.post_tab')
 @stop
 @section('footer') 
 	<script src="{!! url('js/periksa.js') !!}"></script>

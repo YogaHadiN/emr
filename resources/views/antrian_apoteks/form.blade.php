@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				@include('periksas.imagePasien', ['pasien_id' => $antrian_apotek->periksa->pasien_id])
+				@include('periksas.imagePasien', ['pasien' => $antrian_apotek->periksa->pasien, 'temp' => 'image'])
 			</div>
 		</div>
 	</div>

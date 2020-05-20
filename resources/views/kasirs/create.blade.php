@@ -20,7 +20,6 @@ Online Electronic Medical Record | Kasir
 </ol>
 @stop
 @section('content') 
-
 	<div class="row hide">
 		<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
 			<div class="table-responsive">

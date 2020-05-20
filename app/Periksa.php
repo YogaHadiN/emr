@@ -44,6 +44,9 @@ class Periksa extends Model
 	public function getTerapiTempAttribute(){
 		
 		$terapis =  json_decode($this->terapi, true);
+			if (is_null($terapis)) {
+				$terapis = [];
+			}
 		$obatPuyer = false;
 		$puyer = false;
 		$add   = false;

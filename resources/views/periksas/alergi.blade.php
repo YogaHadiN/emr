@@ -26,7 +26,7 @@
 					<tr>
 						<td>
 							{!! Form::select('generik_id', [], null, [
-								'class'    => 'form-control rq',
+								'class'    => 'form-control',
 								'onchange' => 'changeGenerik(this);return false;',
 								'id'       => 'select_generik_id'
 							]) !!}

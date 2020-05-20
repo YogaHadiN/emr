@@ -60,10 +60,7 @@ class PasienController extends Controller
 		$this->input_nama_ibu                = Input::get('nama_ibu');
 		$this->input_riwayat_alergi_obat     = Input::get('riwayat_alergi_obat');
 		$this->input_riwayat_penyakit_dahulu = Input::get('riwayat_penyakit_dahulu');
-		$this->input_image                   = Input::get('image');
-		$this->input_ktp_image               = Input::get('ktp_image');
 		$this->input_email                   = Input::get('email');
-		$this->input_bpjs_image              = Input::get('bpjs_image');
 		$this->input_nomor_asuransi_bpjs     = Input::get('nomor_asuransi_bpjs');
 		$this->input_nomor_ktp               = Input::get('nomor_ktp');
 		$this->random_string                 = Input::get('random_string');
@@ -104,7 +101,6 @@ class PasienController extends Controller
 	}
 
 	public function store(){
-			dd(Input::all()); 
 		$messages = [
 
 			'required' => ':attribute Harus Diisi',
@@ -129,7 +125,6 @@ class PasienController extends Controller
 		return redirect('home/pasiens')->withPesan($pesan);
 	}
 	public function update($id){
-		/* return Input::all(); */ 
 		$messages = [
 
 			'required' => ':attribute Harus Diisi',
@@ -156,14 +151,12 @@ class PasienController extends Controller
 	
 	public function edit($id){
 		$pasien = Pasien::find( $id );
-		 /* return Storage::cloud()->url( 'pasiens/ktp' . $pasien->id . '.jpg' ) ; */
 		$url    = url('/home/pasiens/image');
 
 		if ($pasien->user_id != Auth::id()) {
 			$pesan = Yoga::gagalFlash('Maaf anda tidak bisa mengakses pasien ini');
 			return redirect('home')->withPesan($pesan);
 		}
-
 		$random_string = substr(str_shuffle(MD5(microtime())), 0, 10);
 
 		$asuransis     = Asuransi::where('user_id', Auth::id())->pluck('nama_asuransi', 'id');
@@ -378,7 +371,7 @@ class PasienController extends Controller
 	*/
 	private function inputData($pasien)
 	{
-		$pasien->nama                 = $this->input_nama;
+		$pasien->nama                    = $this->input_nama;
 		$pasien->asuransi_id             = $this->input_asuransi_id;
 		$pasien->nama_peserta            = $this->input_nama_peserta;
 		$pasien->nomor_asuransi          = $this->input_nomor_asuransi;
@@ -400,9 +393,9 @@ class PasienController extends Controller
 		$pasien->nomor_ktp               = $this->input_nomor_ktp;
 		$pasien->user_id                 = Auth::id();
 		$pasien->save();
-		$pasien = $this->imageStore($pasien, 'pasien', 'pasiens/pasien');
-		$pasien = $this->imageStore($pasien, 'ktp', 'pasiens/ktp');
-		$pasien = $this->imageStore($pasien, 'bpjs', 'pasiens/bpjs');
+		$pasien->bpjs_image              = $this->imageUpload("pasiens", 'bpjs','bpjs_image', $pasien->id);
+		$pasien->ktp_image               = $this->imageUpload("pasiens", 'ktp','ktp_image', $pasien->id);
+		$pasien->image                   = $this->imageUpload("pasiens", 'pasien', 'image', $pasien->id);
 		return $pasien;
 	}
 	/**
@@ -421,4 +414,34 @@ class PasienController extends Controller
 		return $pasien;
 	}
 	
+	public function imageUpload($folder, $pre, $fieldName, $id){
+		if(Input::hasFile($fieldName) ) {
+
+			$upload_cover = Input::file($fieldName);
+			//mengambil extension
+			$extension = $upload_cover->getClientOriginalExtension();
+
+			$upload_cover = Image::make($upload_cover);
+			$upload_cover->resize(1000, null, function ($constraint) {
+				$constraint->aspectRatio();
+				$constraint->upsize();
+			});
+
+			//membuat nama file random + extension
+			$filename =	 $pre . $id . '.' . $extension;
+
+			//menyimpan bpjs_image ke folder public/img
+			$destination_path = public_path() . DIRECTORY_SEPARATOR . $folder;
+			// Mengambil file yang di upload
+
+			/* $upload_cover->save($destination_path . '/' . $filename); */
+			Storage::disk('s3')->put( $destination_path . '/' . $filename,   $upload_cover->stream(), 'public' );
+			
+			//mengisi field bpjs_image di book dengan filename yang baru dibuat
+			return $destination_path .'/'. $filename;
+			
+		} else {
+			return null;
+		}
+	}
 }

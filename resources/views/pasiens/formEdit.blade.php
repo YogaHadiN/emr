@@ -2,11 +2,13 @@
 	{!! Form::model($pasien,[
 		'url'     => 'home/pasiens/' . $pasien->id,
 		'enctype' => 'multipart/form-data',
+		"files"  => "true",
 		'method'  => 'put'
 	]) !!}
 @else
 	{!! Form::open([
 		'url'     => 'home/pasiens',
+		"files"  => "true",
 		'enctype' => 'multipart/form-data',
 		'method'  => 'post',
 	]) !!}
@@ -160,40 +162,16 @@
 				{!! Form::text('random_string', $random_string, array(
 					'class'         => 'form-control'
 				))!!}
-				<div class="row">
-					@if(isset($pasien))
-						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-							<button class="btn btn-success btn-block" type="button" onclick='dummySubmit(this);return false;'>Submit</button>
-							{!! Form::submit('Update', ['class' => 'submit btn btn-success hide']) !!}
-						</div>
-						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-							<a class="btn btn-danger btn-block" href="{{ url('home') }}">Cancel</a>
-						</div>
-					{!! Form::close() !!}
-					{!! Form::open(['url' => 'home/pasiens/' . $pasien->id, 'method' => 'delete']) !!}
-						<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-							<button class="btn btn-warning btn-block" onclick="return confirm('Anda yakin ingin menghapus {{ $pasien->id }} - {{  $pasien->nama  }} ?')" type="submit">Delete</button>
-						</div>
-					@else
-						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-							<button class="btn btn-success btn-block" type="button" onclick='dummySubmit(this);return false;'>Update</button>
-							{!! Form::submit('Submit', ['class' => 'submit btn btn-success hide', 'id' => 'submit']) !!}
-						</div>
-						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-							<a class="btn btn-danger btn-block" href="{{ url('home') }}">Cancel</a>
-						</div>
-					@endif
-				</div>
 				@include('images.barcode')
 			</div>
 		</div>
 	</div>
-	<div id="image_container" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 			<div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
 				{!! Form::label('image', 'Foto Pasien') !!}
 				{!! Form::file('image') !!}
 					@if (isset($pasien) && $pasien->image)
-						@include('periksas.imagePasien', ['pasien_id' => $pasien->id])
+						@include('periksas.imagePasien', ['temp' => 'image'])
 					@else
 						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
 					@endif
@@ -203,7 +181,7 @@
 				{!! Form::label('ktp_image', 'KTP') !!}
 				{!! Form::file('ktp_image') !!}
 					@if (isset($pasien) && $pasien->ktp_image)
-						@include('periksas.imagePasien', ['pasien_id' => $pasien->id])
+						@include('periksas.imagePasien', ['temp' => 'ktp_image'])
 					@else
 						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
 					@endif
@@ -213,7 +191,7 @@
 				{!! Form::label('bpjs_image', 'Kartu BPJS') !!}
 				{!! Form::file('bpjs_image') !!}
 					@if (isset($pasien) && $pasien->bpjs_image)
-						@include('periksas.imagePasien', ['pasien_id' => $pasien->id])
+						@include('periksas.imagePasien', ['temp' => 'bpjs_image'])
 					@else
 						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
 					@endif
@@ -221,7 +199,32 @@
 			</div>
 	</div>
 </div>
+<div class="row">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<button class="btn btn-success btn-block" type="button" onclick='dummySubmit(this);return false;'>
+				@if( isset($pasien) )
+					Update
+				@else
+					Submit
+				@endif
+			</button>
+			{!! Form::submit('Submit', ['class' => 'submit btn btn-success hide', 'id' => 'submit']) !!}
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<a class="btn btn-danger btn-block" href="{{ url('home') }}">Cancel</a>
+		</div>
+</div>
 {!! Form::close() !!}
+<br>
+<div class="row">
+	@if(isset($pasien))
+	{!! Form::open(['url' => 'home/pasiens/' . $pasien->id, 'method' => 'delete']) !!}
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<button class="btn btn-warning btn-block" onclick="return confirm('Anda yakin ingin menghapus {{ $pasien->id }} - {{  $pasien->nama  }} ?')" type="submit">Delete</button>
+		</div>
+	{!! Form::close() !!}
+	@endif
+</div>
 	@include('pasiens.image_template')
 	{{-- @include('images.barcode') --}}
 	<div id="app">

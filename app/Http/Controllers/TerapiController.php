@@ -41,6 +41,7 @@ class TerapiController extends Controller
 			return redirect('home/terapis/' . $id . '/edit');
 		}
 		$json_terapi = '[]';
+		/* dd( $json_terapi ); */
 		return view('terapis.create', compact(
 			'nurse_station',
 			'json_terapi'
@@ -313,6 +314,11 @@ class TerapiController extends Controller
 		}
 		return $res;
 	}
-	
-	
+	public function signaSearch(){
+		$param  = Input::get('param');
+		$query  = "SELECT id, signa ";
+		$query .= "FROM signas";
+		$query .= "WHERE signa like '%{$param}%';";
+		return  DB::select($query);
+	}
 }
