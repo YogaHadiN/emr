@@ -40,7 +40,7 @@ Online Electronic Medical Record | Staf
 							<th>Nama</th>
 							<th>Alamat</th>
 							<th>No Telp</th>
-							<th>Rele</th>
+							{{-- <th>Rele</th> --}}
 							<th>Alamat</th>
 						</tr>
 					</thead>
@@ -52,7 +52,7 @@ Online Electronic Medical Record | Staf
 									<td>{{ $staf->nama }}</td>
 									<td>{{ $staf->alamat }}</td>
 									<td>{{ $staf->no_telp }}</td>
-									<td>{{ $staf->role->role }}</td>
+									{{-- <td>{{ $staf->role->role }}</td> --}}
 									<td nowrap class="autofit">
 										{!! Form::open(['url' => 'home/stafs/' . $staf->id, 'method' => 'delete']) !!}
 											<a class="btn btn-warning btn-sm" href="{{ url('home/stafs/' . $staf->id . '/edit') }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>

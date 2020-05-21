@@ -18,6 +18,8 @@ class CreateStafsTable extends Migration
 			$table->string('nama');
 			$table->string('alamat')->nullable();
 			$table->string('no_telp')->nullable();
+			$table->string('image')->nullable();
+			$table->string('ktp_image')->nullable();
 			$table->string('role_id');
 			$table->string('user_id');
 			$table->string('password')->default( bcrypt('123456') );

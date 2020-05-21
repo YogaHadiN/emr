@@ -167,36 +167,36 @@
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-			<div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
-				{!! Form::label('image', 'Foto Pasien') !!}
-				{!! Form::file('image') !!}
-					@if (isset($pasien) && $pasien->image)
-						@include('periksas.imagePasien', ['temp' => 'image'])
-					@else
-						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
-					@endif
-				{!! $errors->first('image', '<p class="help-block">:message</p>') !!}
-			</div>
-			<div class="form-group{{ $errors->has('ktp_image') ? ' has-error' : '' }}">
-				{!! Form::label('ktp_image', 'KTP') !!}
-				{!! Form::file('ktp_image') !!}
-					@if (isset($pasien) && $pasien->ktp_image)
-						@include('periksas.imagePasien', ['temp' => 'ktp_image'])
-					@else
-						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
-					@endif
-				{!! $errors->first('ktp_image', '<p class="help-block">:message</p>') !!}
-			</div>
-			<div class="form-group{{ $errors->has('bpjs_image') ? ' has-error' : '' }}">
-				{!! Form::label('bpjs_image', 'Kartu BPJS') !!}
-				{!! Form::file('bpjs_image') !!}
-					@if (isset($pasien) && $pasien->bpjs_image)
-						@include('periksas.imagePasien', ['temp' => 'bpjs_image'])
-					@else
-						<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
-					@endif
-				{!! $errors->first('bpjs_image', '<p class="help-block">:message</p>') !!}
-			</div>
+		<div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
+			{!! Form::label('image', 'Foto Pasien') !!}
+			{!! Form::file('image') !!}
+				@if (isset($pasien) && $pasien->image)
+					@include('periksas.imagePasien', ['model' => $pasien,'temp' => 'image'])
+				@else
+					<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
+				@endif
+			{!! $errors->first('image', '<p class="help-block">:message</p>') !!}
+		</div>
+		<div class="form-group{{ $errors->has('ktp_image') ? ' has-error' : '' }}">
+			{!! Form::label('ktp_image', 'KTP') !!}
+			{!! Form::file('ktp_image') !!}
+				@if (isset($pasien) && $pasien->ktp_image)
+					@include('periksas.imagePasien', ['model' => $pasien,'temp' => 'ktp_image'])
+				@else
+					<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
+				@endif
+			{!! $errors->first('ktp_image', '<p class="help-block">:message</p>') !!}
+		</div>
+		<div class="form-group{{ $errors->has('bpjs_image') ? ' has-error' : '' }}">
+			{!! Form::label('bpjs_image', 'Kartu BPJS') !!}
+			{!! Form::file('bpjs_image') !!}
+				@if (isset($pasien) && $pasien->bpjs_image)
+					@include('periksas.imagePasien', ['model' => $pasien,'temp' => 'bpjs_image'])
+				@else
+					<p> {!! HTML::image(asset('img/photo_not_available.png'), null, ['class'=>'img-rounded upload']) !!} </p>
+				@endif
+			{!! $errors->first('bpjs_image', '<p class="help-block">:message</p>') !!}
+		</div>
 	</div>
 </div>
 <div class="row">

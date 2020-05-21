@@ -6,7 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>@yield('title')</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous" />
 	<style type="text/css" media="all">
@@ -109,67 +108,7 @@
                             IN+
                         </div>
                     </li>
-                    <li>
-                        <a href="{{ url('home') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Home</span></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Data-data</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>{!! HTML::link('home/users', 'User')!!}</li>
-                            <li>{!! HTML::link('home/pasiens', 'Pasien')!!}</li>
-                            <li>{!! HTML::link('home/asuransis', 'Asuransi')!!}</li>
-                            <li>{!! HTML::link('home/tarifs', 'Tarif')!!}</li>
-                            <li>{!! HTML::link('home/suppliers', 'Supplier')!!}</li>
-                            <li>{!! HTML::link('home/stafs', 'Staf')!!}</li>
-                            <li>{!! HTML::link('home/polis', 'Poli')!!}</li>
-                            <li>{!! HTML::link('home/roles', 'Role')!!}</li>
-                        </ul>
-                    </li>
-					<li>
-                        <a href="{{ url('home/daftars') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Nurse Station</span></a>
-                    </li>
-					<li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Poli</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-							@foreach(App\Poli::where('user_id', \Auth::id())->get() as $poli)	
-								<li>{!! HTML::link('home/polis/' . $poli->id, $poli->poli)!!}</li>
-							@endforeach
-                        </ul>
-                    </li>
-					<li>
-                        <a href="{{ url('home/antrian_apoteks') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Apotek</span></a>
-                    </li>
-					<li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Kasir</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>{!! HTML::link('home/kasirs', 'Pemeriksaan')!!}</li>
-                            <li>{!! HTML::link('home/faktur_belanja_obats', 'Pembelian Obat')!!}</li>
-                            <li>{!! HTML::link('home/transaksis/pengeluaran', 'Pengeluaran')!!}</li>
-                        </ul>
-                    </li>
-					<li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Obat</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>{!! HTML::link('home/generiks', 'Generik')!!}</li>
-                            <li>{!! HTML::link('home/obats', 'Obat')!!}</li>
-                            <li>{!! HTML::link('home/aturan_minums', 'Aturan Minum')!!}</li>
-                            <li>{!! HTML::link('home/signas', 'Signa')!!}</li>
-                        </ul>
-                    </li>
-					<li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Akuntansi</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>{!! HTML::link('home/coas', 'Coa')!!}</li>
-                            <li>{!! HTML::link('home/kelompok_coas', 'Kelompok Coa')!!}</li>
-                        </ul>
-                    </li>
-					<li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Diagnosa</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>{!! HTML::link('home/icds', 'ICD')!!}</li>
-                            <li>{!! HTML::link('home/diagnosas', 'Diagnosa')!!}</li>
-                        </ul>
-                    </li>
+					@include('layout.nav')
                 </ul>
             </div>
         </nav>
@@ -421,10 +360,22 @@
 			cache: true
 		  },
 		  placeholder: if_null,
-		  minimumInputLength: 0
+		  selectOnClose: true,
+		  minimumInputLength: 1
 		}
 		return result;
 	}
+// on first focus (bubbles up to document), open the menu
+$(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+	$(this).closest(".form-group").find('select').select2('open');
+});
+
+// steal focus during close - only capture once and stop propogation
+$('select.select2').on('select2:closing', function (e) {
+	$(e.target).data("select2").$selection.one('focus focusin', function (e) {
+		e.stopPropagation();
+	});
+});
     </script>
         @yield('footer')
 </body>

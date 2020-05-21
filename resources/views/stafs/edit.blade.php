@@ -23,21 +23,29 @@ Online Electronic Medical Record | Edig Staf
 
 @stop
 @section('content') 
+{!! Form::model($staf, [
+		'url'     => 'home/stafs/' . $staf->id,
+		"files"   => "true",
+		'enctype' => 'multipart/form-data',
+		'method'  => 'put'
+]) !!}
+	@include('stafs.form')
+{!! Form::close() !!}
+{!! Form::open(['url' => 'home/stafs/' . $staf->id, 'method' => 'delete']) !!}
 	<div class="row">
-		<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Edit Staf</h3>
-				</div>
-				<div class="panel-body">
-					{!! Form::model($staf, ['url' => 'home/stafs/' . $staf->id, 'method' => 'put']) !!}
-						@include('stafs.form')
-					{!! Form::close() !!}
-				</div>
-			</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<button class="btn btn-warning btn-block" onclick="return confirm('Anda yakin ingin menghapus {{ $staf->id }} - {{  $staf->nama  }} ?')" type="submit">Delete</button>
 		</div>
 	</div>
+{!! Form::close() !!}
 @stop
 @section('footer') 
+	<script type="text/javascript" charset="utf-8">
+		function dummySubmit(control){
+			if(validatePass2(control)){
+				$('#submit').click();
+			}
+		}
+	</script>
 @stop
 

@@ -14,5 +14,4 @@ class Staf extends Model
 	public static function selectList(){
 		return array(null => '- Pilih Staf -') + Staf::where('user_id', Auth::id())->pluck('nama', 'id')->all();
 	}
-	
 }

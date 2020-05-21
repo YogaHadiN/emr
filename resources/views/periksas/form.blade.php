@@ -3,9 +3,9 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						@if( isset($periksa) )
-							@include('periksas.imagePasien', ['pasien' => $periksa->pasien,  'temp' => 'image'])
+							@include('periksas.imagePasien', ['model' => $periksa->pasien,  'temp' => 'image'])
 						@else
-							@include('periksas.imagePasien', ['pasien' => $nurse_station->pasien,  'temp' => 'image'])
+							@include('periksas.imagePasien', ['model' => $nurse_station->pasien,  'temp' => 'image'])
 						@endif
 						@if( isset($periksa) )
 							<h1>{{ $periksa->pasien->nama }}</h1>

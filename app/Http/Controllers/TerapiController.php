@@ -315,10 +315,19 @@ class TerapiController extends Controller
 		return $res;
 	}
 	public function signaSearch(){
-		$param  = Input::get('param');
-		$query  = "SELECT id, signa ";
-		$query .= "FROM signas";
-		$query .= "WHERE signa like '%{$param}%';";
+		$param  = Input::get('q');
+		$query  = "SELECT id, signa as text ";
+		$query .= "FROM signas ";
+		$query .= "WHERE signa like '%{$param}%' ";
+		$query .= "LIMIT 10";
+		return  DB::select($query);
+	}
+	public function aturanMinumSearch(){
+		$param  = Input::get('q');
+		$query  = "SELECT id, aturan_minum as text ";
+		$query .= "FROM aturan_minums ";
+		$query .= "WHERE aturan_minum like '%{$param}%' ";
+		$query .= "LIMIT 10";
 		return  DB::select($query);
 	}
 }

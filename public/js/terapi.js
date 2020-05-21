@@ -13,6 +13,8 @@ var obatAdd         = false;
 var templateStandar = '';
 var url_param       = base + '/terapis/obat/cari/ajax';
 
+$('#signa').select2(ajax_search('home/terapis/signa/cari', 'Signa' ));
+$('#aturan_minum').select2(ajax_search('home/terapis/aturan_minum/cari', 'Aturan Minum' ));
 $('#nama_obat_ajax_search').select2({
 	width: '100%',
 	theme: "bootstrap",
@@ -104,14 +106,13 @@ function collectData(){
 		'aturan_minum_text': $('#aturan_minum option:selected').text(),
 		'jumlah':            $('#jumlah').val()
 	};
-	console.log(data);
 }
 
 function clearSelection(){
 	$('#nama_obat_ajax_search').empty();
 	if ( !puyer && !add ) {
-		$('#signa').val('1').selectpicker('refresh');
-		$('#aturan_minum').val('').selectpicker('refresh');
+		$('#signa').empty();
+		$('#aturan_minum').empty();
 		$('#jumlah').val('');
 	}
 	focusObat();
@@ -265,18 +266,22 @@ function focusObat(){
 function endPuyer(){
 	$('#selesaikanPuyer').fadeOut('slow');
 	setValueNamaObatThenReadOnly('Kertas Puyer Biasa', 1);
-	$('#signa').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
-	$('#aturan_minum').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
+	$('#signa').empty();
+	$('#signa').fadeIn('slow');
+	$('#aturan_minum').empty();
+	$('#aturan_minum').fadeIn('slow');
 	$('#jumlah').val('').focus();
 }
 
 function endAdd(){
 	$('#selesaikanAdd').fadeOut('slow');
 	setValueNamaObatThenReadOnly('Add Sirup', 2);
-	$('#signa').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
-	$('#aturan_minum').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
+	$('#signa').empty();
+	$('#signa').fadeIn('slow');
+	$('#aturan_minum').empty();
+	$('#aturan_minum').fadeIn('slow');
 	$('#jumlah').val('0').fadeOut('slow');
-	$('#signa').closest('.form-group').find('.dropdown-toggle').focus();
+	$('#signa').select2('open');
 
 }
 function isset(ref) { return typeof ref !== 'undefined' }
@@ -319,12 +324,12 @@ function gantiSeleksiPuyer(){
 		gantiObatKeKapsulDanTablet();
 	}
 
-	$('#signa').val(2);
+	setValueSelect2( $('#signa'), 'Puyer', '2' );
 	if ( $('#signa').closest('.form-group').is(':visible') ) {
 		$('#signa').closest('.form-group').fadeOut('slow');
 	}
 
-	$('#aturan_minum').val(1)
+	setValueSelect2( $('#aturan_minum'), 'Sesudah Makan', '1' );
 	if ( $('#aturan_minum').closest('.form-group').is(':visible') ) {
 		$('#aturan_minum').closest('.form-group').fadeOut('slow');
 	}
@@ -361,12 +366,12 @@ function gantiSeleksiAdd(){
 		url_param = base + '/terapis/obat/cari/ajax/add'; 
 	}
 
-	$('#signa').val(1).selectpicker('refresh');
+	setValueSelect2( $('#signa'), 'Add', '1' );
 	if ( $('#signa').closest('.form-group').is(':visible') ) {
 		$('#signa').closest('.form-group').fadeOut('slow');
 	}
 
-	$('#aturan_minum').val(1)
+	setValueSelect2( $('#aturan_minum'), 'Sesudah Makan', '1' );
 	if ( $('#aturan_minum').closest('.form-group').is(':visible') ) {
 		$('#aturan_minum').closest('.form-group').fadeOut('slow');
 	}
@@ -406,11 +411,11 @@ function gantiSeleksiStandar(){
 		url_param = base + '/terapis/obat/cari/ajax'; 
 	}
 
-	$('#signa').val('');
+	$('#signa').empty();
 	if ( $('#signa').closest('.form-group').is(':hidden') ) {
 		$('#signa').closest('.form-group').fadeIn('slow');
 	}
-	$('#aturan_minum').val('')
+	$('#aturan_minum').empty();
 	if ( $('#aturan_minum').closest('.form-group').is(':hidden') ) {
 		$('#aturan_minum').closest('.form-group').fadeIn('slow');
 	}
@@ -443,10 +448,12 @@ function getUrl() {
 function kembaliResepStandar() {
 	$('#selesaikanAdd').fadeOut('slow');
 	$('#nama_obat_ajax_search').val('2').selectpicker('refresh').closest('.form-group').fadeOut('slow');
-	$('#signa').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
-	$('#aturan_minum').val('').selectpicker('refresh').closest('.form-group').fadeIn('slow');
+	$('#signa').empty();
+	$('#signa').fadeIn('slow');
+	$('#aturan_minum').empty();
+	$('#aturan_minum').fadeIn('slow');
 	$('#jumlah').val('0').fadeOut('slow');
-	$('#signa').closest('.form-group').find('.dropdown-toggle').focus();
+	$('#signa').select2('open');
 }
 
 function kembaliKeStandar() {
@@ -461,11 +468,11 @@ function kembaliKeStandar() {
 	}
 	$('#tipe_resep').val('1').selectpicker('refresh');
 	$('#tipe_resep').closest('.form-group').fadeIn('slow');
-	$('#signa').val('').selectpicker('refresh');
+	$('#signa').empty();
 	if ( $('#signa').closest('.form-group').is(':hidden') ) {
 		$('#signa').closest('.form-group').fadeIn('slow');
 	}
-	$('#aturan_minum').val('').selectpicker('refresh');
+	$('#aturan_minum').empty();
 	if ( $('#aturan_minum').closest('.form-group').is(':hidden') ) {
 		$('#aturan_minum').closest('.form-group').fadeIn('slow');
 	}
@@ -513,9 +520,13 @@ function changeStatusButton() {
 	}
 }
 function setValueNamaObatThenReadOnly( text_select, i ){
-	$("#nama_obat_ajax_search").append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
+	selector.append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
 	$("#nama_obat_ajax_search").val(i).trigger('change');
 	$('#nama_obat_ajax_search').attr('disabled', 'disabled').trigger('change');
+}
+function setValueSelect2( selector, text_select, i ){
+	selector.append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
+	selector.val(i).trigger('change');
 }
 function editRacikan(i) {
 	rowDelete = true;
@@ -548,18 +559,30 @@ function signaSearch(control) {
 	$.get(base + '/home/terapis/signa/ajax/search',
 		{ 'param' : $(control).val()  },
 		function (data, textStatus, jqXHR) {
-			data = $.trim(data);
 			var temp = '';
 			if (data.length > 0) {
 				// permainkan button create signa
 			}
 			for (var i = 0, len = data.length; i < len; i++) {
+				console.log('data');
+				console.log(data[i]);
 				temp += '<tr>';
 				temp += '<td class="signa">' + data[i]['signa'] + '</td>';
 				temp += '<td class="action"><button class="btn btn-info btn-sm" class="pilihSigna(' + data[i]['id'] + ')">Pilih</button></td>';
 				temp += '</tr>';
 			}
 			$('#signa_ajax_container').html(temp);
+		}
+	);
+}
+function submitSigna(control) {
+	var signa_text = $('#signa_text').val();
+	$.post(base + '/home/terapis/create/signa',
+		{ param: signa_text },
+		function (data, textStatus, jqXHR) {
+			// buat signa dan aturan minum jadi ajax
+			// focus ke signa
+			// tab kembali ke status
 		}
 	);
 }

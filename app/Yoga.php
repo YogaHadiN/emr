@@ -3,6 +3,8 @@
 namespace App;
 
 use Input;
+use Image;
+use Storage;
 use App\Rak;
 use App\Poli;
 use App\SmsKirim;
@@ -2605,5 +2607,36 @@ class Yoga {
 			0    => 'Tidak ' . $text,
 			1    => $text
 		];
+	}
+	public static function uploadS3($hasFile, $inputFile, $pre, $folder, $fieldName, $table){
+
+		if($hasFile) {
+
+			$upload_cover = $inputFile;
+			//mengambil extension
+			$extension = $upload_cover->getClientOriginalExtension();
+
+			$upload_cover = Image::make($upload_cover);
+			$upload_cover->resize(1000, null, function ($constraint) {
+				$constraint->aspectRatio();
+				$constraint->upsize();
+			});
+			//membuat nama file random + extension
+			$filename =	 $pre . $table->id . '.' . $extension;
+			//menyimpan bpjs_image ke folder public/img
+			$destination_path = public_path() . DIRECTORY_SEPARATOR . $folder;
+
+			$filename = $destination_path . DIRECTORY_SEPARATOR . $filename;
+
+			// Mengambil file yang di upload
+			Storage::disk('s3')->put(  $filename,   $upload_cover->stream(), 'public' );
+			
+			//mengisi field bpjs_image di book dengan filename yang baru dibuat
+			return $filename;
+			
+		} else {
+			return $table>$fieldName;
+		}
+
 	}
 }
