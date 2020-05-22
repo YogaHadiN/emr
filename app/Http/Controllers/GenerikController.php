@@ -85,4 +85,43 @@ class GenerikController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$generik                = Input::get('generik');
+		$pregnancy_safety_index = Input::get('pregnancy_safety_index');
+		$displayed_rows         = Input::get('displayed_rows');
+		$key                    = Input::get('key');
+		$data                   = $this->queryData($generik, $pregnancy_safety_index, $displayed_rows, $key);
+		$count                  = $this->queryData($generik, $pregnancy_safety_index, $displayed_rows, $key, true)[0]->jumlah;
+		$pages                  = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($generik, $pregnancy_safety_index, $displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "id, ";
+			$query .= "generik, ";
+			$query .= "pregnancy_safety_index ";
+		} else {
+			$query .= "count(id) as jumlah ";
+		}
+		$query .= "FROM generiks ";
+		$query .= "WHERE ";
+		$query .= "(generik like '%{$generik}%') ";
+		$query .= "AND (pregnancy_safety_index like '%{$pregnancy_safety_index}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
 }

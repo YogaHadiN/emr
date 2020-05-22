@@ -20,44 +20,58 @@ Online Electronic Medical Record | Generik
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="table-responsive">
+				<div class="row">
+					<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+						Menampilkan <span id="rows"></span> hasil
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 padding-bottom">
+						{!! Form::open(['url' => 'home/pasiens/ajax/selectpasien', 'method' => 'get', 'id' => 'ajaxkeyup', 'autocomplete' => 'off'])!!}
+						{!! Form::select('displayed_rows', App\Yoga::manyRows(), 15, [
+							'class' => 'form-control',
+							'onchange' => 'clearAndSelectPasien();return false;',
+							'id'    => 'displayed_rows'
+						]) !!}
+					</div>
+			  </div>
 				<table class="table table-hover table-condensed table-bordered">
 					<thead>
 						<tr>
-							<th>id</th>
-							<th>Generik</th>
-							<th>Pregnancy Safety Index</th>
+							<th>
+								id
+							</th>
+							<th>
+								Generik
+								{!! Form::text('generik', null, [
+									'id'      => 'generik' ,
+									'class'   => 'form-control ajaxselectgenerik'
+								]) !!}
+							</th>
+							<th>
+								Pregnancy Safety Index
+								{!! Form::text('pregnancy_safety_index', null, [
+									'id'      => 'pregnancy_safety_index' ,
+									'class'   => 'form-control ajaxselectgenerik'
+								]) !!}
+							</th>
 						</tr>
 					</thead>
-					<tbody>
-						@if($generiks->count() > 0)
-							@foreach($generiks as $generik)
-								<tr>
-									<td>{{ $generik->id }}</td>
-									<td>{{ $generik->generik }}</td>
-									<td>{!! $generik->pregnancy_safety_index !!}</td>
-								</tr>
-							@endforeach
-						@else
-							<tr>
-								<td colspan="">
-									{!! Form::open(['url' => 'generiks/imports', 'method' => 'post', 'files' => 'true']) !!}
-										<div class="form-group">
-											{!! Form::label('file', 'Data tidak ditemukan, upload data?') !!}
-											{!! Form::file('file') !!}
-											{!! Form::submit('Upload', ['class' => 'btn btn-primary', 'id' => 'submit']) !!}
-										</div>
-									{!! Form::close() !!}
-								</td>
-							</tr>
-						@endif
-					</tbody>
+					<tbody id="ajax_container"></tbody>
 				</table>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div id="page-box">
+							<nav class="text-right" aria-label="Page navigation" id="paging">
+							
+							</nav>
+						</div>
+					</div>
+				</div>
 			</div>
-			{{ $generiks->links() }}
 		</div>
 	</div>
 @stop
 @section('footer') 
-	
+	<script src="{!! url('js/twbs-pagination/jquery.twbsPagination.min.js') !!}"></script>
+	{!! HTML::script('js/generik.js')!!}
 @stop
 

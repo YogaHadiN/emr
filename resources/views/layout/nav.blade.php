@@ -11,14 +11,14 @@
 		<li>{!! HTML::link('home/suppliers', 'Supplier')!!}</li>
 		<li>{!! HTML::link('home/stafs', 'Staf')!!}</li>
 		<li>{!! HTML::link('home/polis', 'Poli')!!}</li>
-		<li>{!! HTML::link('home/roles', 'Role')!!}</li>
+		{{-- <li>{!! HTML::link('home/roles', 'Role')!!}</li> --}}
 	</ul>
 </li>
 <li>
-	<a href="{{ url('home/daftars') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Nurse Station</span></a>
+	<a href="{{ url('home/daftars') }}"><i class="fas fa-stethoscope"></i> <span class="nav-label">Nurse Station</span></a>
 </li>
 <li>
-	<a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Poli</span><span class="fa arrow"></span></a>
+	<a href="#"><i class="fa fa-clinic-medical"></i> <span class="nav-label">Poli</span><span class="fa arrow"></span></a>
 	<ul class="nav nav-second-level">
 		@foreach(App\Poli::where('user_id', \Auth::id())->get() as $poli)	
 			<li>{!! HTML::link('home/polis/' . $poli->id, $poli->poli)!!}</li>
@@ -26,18 +26,20 @@
 	</ul>
 </li>
 <li>
-	<a href="{{ url('home/antrian_apoteks') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Apotek</span></a>
+	<a href="{{ url('home/antrian_apoteks') }}"><i class="fas fa-prescription"></i> <span class="nav-label">Antrian Apotek</span></a>
 </li>
 <li>
-	<a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Kasir</span><span class="fa arrow"></span></a>
+	<a href="{{ url('home/kasirs') }}"><i class="fas fa-cash-register"></i> <span class="nav-label">Antrian Kasir</span></a>
+</li>
+<li>
+	<a href="#"><i class="fa fa-dollar-sign"></i> <span class="nav-label">Transaksi Kasir</span><span class="fa arrow"></span></a>
 	<ul class="nav nav-second-level">
-		<li>{!! HTML::link('home/kasirs', 'Pemeriksaan')!!}</li>
 		<li>{!! HTML::link('home/faktur_belanja_obats', 'Pembelian Obat')!!}</li>
 		<li>{!! HTML::link('home/transaksis/pengeluaran', 'Pengeluaran')!!}</li>
 	</ul>
 </li>
 <li>
-	<a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Obat</span><span class="fa arrow"></span></a>
+	<a href="#"><i class="fa fa-pills"></i> <span class="nav-label">Obat</span><span class="fa arrow"></span></a>
 	<ul class="nav nav-second-level">
 		<li>{!! HTML::link('home/generiks', 'Generik')!!}</li>
 		<li>{!! HTML::link('home/obats', 'Obat')!!}</li>
@@ -46,14 +48,14 @@
 	</ul>
 </li>
 <li>
-	<a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Akuntansi</span><span class="fa arrow"></span></a>
+	<a href="#"><i class="fa fa-calculator"></i> <span class="nav-label">Akuntansi</span><span class="fa arrow"></span></a>
 	<ul class="nav nav-second-level">
 		<li>{!! HTML::link('home/coas', 'Coa')!!}</li>
 		<li>{!! HTML::link('home/kelompok_coas', 'Kelompok Coa')!!}</li>
 	</ul>
 </li>
 <li>
-	<a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Diagnosa</span><span class="fa arrow"></span></a>
+	<a href="#"><i class="fa fa-file-medical"></i> <span class="nav-label">Diagnosa</span><span class="fa arrow"></span></a>
 	<ul class="nav nav-second-level">
 		<li>{!! HTML::link('home/icds', 'ICD')!!}</li>
 		<li>{!! HTML::link('home/diagnosas', 'Diagnosa')!!}</li>

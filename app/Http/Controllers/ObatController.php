@@ -241,4 +241,85 @@ class ObatController extends Controller
 		}
 		return $data;
 	}
+	public function searchAjax(){
+		$merek          = Input::get('merek');
+		$generik        = Input::get('generik');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($merek, $generik, $displayed_rows, $key);
+		$count          = $this->queryData($merek, $generik, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($merek, $generik, $displayed_rows, $key, $count = false){
+		$pass  = $key * $displayed_rows;
+		$query = "SELECT ";
+		if (!$count) {
+			$query .= "ob.id as id, ";
+			$query .= "merek, ";
+			$query .= "generik, ";
+			$query .= "bobot, ";
+			$query .= "stok as jumlah ";
+		} else {
+			$query .= "count(*) as jumlah ";
+		}
+		if ($count) {
+			$query .= "FROM (SELECT ob.id from obats ob ";
+		} else {
+			$query .= "FROM obats as ob ";
+		}
+		$query .= "LEFT JOIN komposisis as ko on ko.obat_id = ob.id ";
+		$query .= "LEFT JOIN generiks as ge on ge.id = ko.generik_id ";
+		$query .= "WHERE ";
+		$query .= "(ob.merek like '%{$merek}%') AND ";
+		$query .= "(generik like '%{$generik}%' or generik is null) ";
+		if ($count) {
+			$query .= "GROUP BY ob.id) d;";
+		} else {
+			$query .= "GROUP BY ob.id ORDER BY ob.created_at DESC LIMIT {$pass}, {$displayed_rows}";
+		}
+
+		$result = DB::select($query);
+
+		if ($count) {
+			return $result;
+		} else {
+			$ob_id = [];
+			$dataResult = [];
+			foreach ($result as $r) {
+				$ob_id[] = $r->id;
+				$dataResult[ $r->id ]['id'] = $r->id;
+				$dataResult[ $r->id ]['merek'] = $r->merek;
+				$dataResult[ $r->id ]['jumlah'] = $r->jumlah;
+			}
+			$komposisis = Komposisi::with('generik')->whereIn('obat_id', $ob_id)->get();
+			$data_komposisi = [];
+			foreach ($komposisis as $komposisi) {
+				if (isset($komposisi->generik_id)) {
+					$data_komposisi[ $komposisi->obat_id ][] = [
+						'generik' => $komposisi->generik->generik,
+						'bobot'   => $komposisi->bobot
+					];
+				}
+			}
+			foreach ($dataResult as $k => $dr) {
+				if (isset( $data_komposisi[$k] )) {
+					$dataResult[$k]['komposisi'] = $data_komposisi[$k];
+				} else {
+					$dataResult[$k]['komposisi'] = [];
+				}
+			}
+			$result = [];
+			foreach ($dataResult as $dr) {
+				$result[] = $dr;
+			}
+			return $result;
+		}
+	}
 }

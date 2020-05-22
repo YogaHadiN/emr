@@ -24,6 +24,9 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::resource('home/roles', 'RoleController');
 	Route::resource('home/users', 'UserController');
 	Route::resource('home/stafs', 'StafController');
+	Route::get('home/generiks/search/ajax', 'GenerikController@searchAjax');
+	Route::get('/home/obats/search/ajax', 'ObatController@searchAjax');
+
 	Route::resource('home/generiks', 'GenerikController');
 	Route::get('home/terapis/jenis_obat_standar', 'ObatController@jenisObatStandar');
 	Route::get('home/terapis/jenis_obat_add', 'ObatController@jenisObatAdd');
@@ -33,8 +36,8 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::get('home/nurse_stations/{id}/periksa/terapi', 'TerapiController@create');
 	Route::get('terapis/obat/cari/ajax', 'TerapiController@obatAjax');
 	Route::get('terapis/obat/cari/ajax/{jenis_obat}', 'TerapiController@obatAjaxCustom');
-	Route::get('home/terapis/signa/cari', 'TerapiController@signaSearch');
-	Route::get('home/terapis/aturan_minum/cari', 'TerapiController@aturanMinumSearch');
+	Route::get('home/terapis/signa', 'TerapiController@signaCreate');
+	Route::get('home/terapis/aturan_minum', 'TerapiController@aturanMinumCreate');
 
 	Route::resource('home/terapis', 'TerapiController');
 	Route::post('home/antrian_apoteks/{id}/kembalikan', 'AntrianApotekController@kembalikan');

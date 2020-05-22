@@ -11,6 +11,14 @@ use DB;
 
 class RoleController extends Controller
 {
+	/**
+	* @param 
+	*/
+	public function __construct()
+	{
+
+	}
+	
 	public function index(){
 		$roles = Role::paginate(20);
 		return view('roles.index', compact(

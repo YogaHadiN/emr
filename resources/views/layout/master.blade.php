@@ -34,7 +34,7 @@
     <link href="{!! asset('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css') !!}" rel="stylesheet">
 	<!-- Latest compiled and minified CSS -->
     {{-- <link href="{!! asset('css/all.css') !!}" rel="stylesheet" media="screen"> --}}
-	<link href="{!! asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') !!}" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/888ab79ab3.js" crossorigin="anonymous"></script>
 	<style type="text/css" media="all">
 		.fixed {
 			position: fixed;
@@ -365,18 +365,18 @@
 		}
 		return result;
 	}
-// on first focus (bubbles up to document), open the menu
-$(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
-	$(this).closest(".form-group").find('select').select2('open');
-});
-
-// steal focus during close - only capture once and stop propogation
-$('select.select2').on('select2:closing', function (e) {
-	$(e.target).data("select2").$selection.one('focus focusin', function (e) {
-		e.stopPropagation();
+	// on first focus (bubbles up to document), open the menu
+	$(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+		$(this).closest(".form-group").find('select').select2('open');
 	});
-});
-    </script>
+
+	// steal focus during close - only capture once and stop propogation
+	$('select.select2').on('select2:closing', function (e) {
+		$(e.target).data("select2").$selection.one('focus focusin', function (e) {
+			e.stopPropagation();
+		});
+	});
+</script>
         @yield('footer')
 </body>
 </html>

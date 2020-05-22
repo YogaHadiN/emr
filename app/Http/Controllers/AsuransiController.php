@@ -25,9 +25,7 @@ class AsuransiController extends Controller
 		));
 	}
 	public function create(){
-		return view('asuransis.create', compact(
-			''
-		));
+		return view('asuransis.create', []);
 	}
 	
 	public function edit($id){

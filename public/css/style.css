@@ -5123,4 +5123,16 @@ table.tabelTerapi tr td {
 .font-super-big-without-padding{
 	font-size:80px;
 }
-
+img.loader {
+	display:    block;
+	max-width:  100px;
+	max-height: 100px;
+	width:      auto;
+	height:     auto;
+    margin-left: auto;
+    margin-right: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
