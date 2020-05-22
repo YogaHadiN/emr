@@ -12,10 +12,7 @@ use DB;
 class TarifController extends Controller
 {
 	public function index(){
-		$tarifs = Tarif::where('user_id', Auth::id())->paginate(20);
-		return view('tarifs.index', compact(
-			'tarifs'
-		));
+		return view('tarifs.index');
 	}
 	public function create(){
 		return view('tarifs.create');
@@ -86,4 +83,45 @@ class TarifController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$tarif                = Input::get('tarif');
+		$displayed_rows         = Input::get('displayed_rows');
+		$key                    = Input::get('key');
+		$data                   = $this->queryData($tarif, $displayed_rows, $key);
+		$count                  = $this->queryData($tarif, $displayed_rows, $key, true)[0]->jumlah;
+		$pages                  = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($tarif, $displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "ta.id as id, ";
+			$query .= "jenis_tarif, ";
+			$query .= "biaya, ";
+			$query .= "jasa_dokter, ";
+			$query .= "bhp_items ";
+		} else {
+			$query .= "count(ta.id) as jumlah ";
+		}
+		$query .= "FROM tarifs as ta ";
+		$query .= "JOIN jenis_tarifs as je on je.id = ta.jenis_tarif_id ";
+		$query .= "WHERE ";
+		$query .= "(jenis_tarif like '%{$tarif}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY ta.created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

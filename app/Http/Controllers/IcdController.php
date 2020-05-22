@@ -11,10 +11,7 @@ use DB;
 class IcdController extends Controller
 {
 	public function index(){
-		$icds = Icd::paginate(20);
-		return view('icds.index', compact(
-			'icds'
-		));
+		return view('icds.index');
 	}
 	public function create(){
 		return view('icds.create');
@@ -85,4 +82,44 @@ class IcdController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+
+	public function searchAjax(){
+		$icd            = Input::get('icd');
+		$icd_id         = Input::get('icd_id');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($icd, $icd_id, $displayed_rows, $key);
+		$count          = $this->queryData($icd, $icd_id, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($icd, $icd_id, $displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "id, ";
+			$query .= "diagnosaICD ";
+		} else {
+			$query .= "count(id) as jumlah ";
+		}
+		$query .= "FROM icds ";
+		$query .= "WHERE ";
+		$query .= "(diagnosaICD like '%{$icd}%') ";
+		$query .= "AND (id like '%{$icd_id}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

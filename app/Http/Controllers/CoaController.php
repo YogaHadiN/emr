@@ -11,10 +11,7 @@ use DB;
 class CoaController extends Controller
 {
 	public function index(){
-		$coas = Coa::paginate(15);
-		return view('coas.index', compact(
-			'coas'
-		));
+		return view('coas.index');
 	}
 	public function create(){
 		return view('coas.create');
@@ -85,4 +82,46 @@ class CoaController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$coa   = Input::get('coa');
+		$kelompok_coa   = Input::get('kelompok_coa');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($coa,  $kelompok_coa, $displayed_rows, $key);
+		$count          = $this->queryData($coa,  $kelompok_coa, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($coa, $kelompok_coa, $displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "co.id as id, ";
+			$query .= "coa, ";
+			$query .= "kelompok_coa, ";
+			$query .= "saldo_awal as saldo ";
+		} else {
+			$query .= "count(co.id) as jumlah ";
+		}
+		$query .= "FROM coas as co ";
+		$query .= "JOIN kelompok_coas as ke on ke.id = co.kelompok_coa_id ";
+		$query .= "WHERE ";
+		$query .= "(coa like '%{$coa}%') ";
+		$query .= "AND (kelompok_coa like '%{$kelompok_coa}%') ";
+		$query .= "GROUP BY co.id ";
+		$query .= "ORDER BY co.created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

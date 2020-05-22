@@ -25,7 +25,6 @@ Online Electronic Medical Record | Generik
 						Menampilkan <span id="rows"></span> hasil
 					</div>
 					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 padding-bottom">
-						{!! Form::open(['url' => 'home/pasiens/ajax/selectpasien', 'method' => 'get', 'id' => 'ajaxkeyup', 'autocomplete' => 'off'])!!}
 						{!! Form::select('displayed_rows', App\Yoga::manyRows(), 15, [
 							'class' => 'form-control',
 							'onchange' => 'clearAndSelectPasien();return false;',

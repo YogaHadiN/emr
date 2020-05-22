@@ -25,43 +25,52 @@ Online Electronic Medical Record | ICD 10
 		</div>
 		<div class="panel-body">
 			<div class="table-responsive">
+				<div class="row">
+					<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+						Menampilkan <span id="rows"></span> hasil
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 padding-bottom">
+						{!! Form::select('displayed_rows', App\Yoga::manyRows(), 15, [
+							'class' => 'form-control',
+							'onchange' => 'clearAndSelect();return false;',
+							'id'    => 'displayed_rows'
+						]) !!}
+					</div>
+				</div>
 				<table class="table table-hover table-condensed table-bordered">
 					<thead>
 						<tr>
-							<th>ID</th>
-							<th>Nama ICD 10</th>
+							<th>ID
+								{!! Form::text('icd_id', null, [
+									'id'      => 'icd_id' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
+							<th>Nama ICD 10
+								{!! Form::text('icd', null, [
+									'id'      => 'icd' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
 						</tr>
 					</thead>
-					<tbody>
-						@if($icds->count() > 0)
-							@foreach($icds as $icd)
-
-								<tr>
-									<td>{{ $icd->id }}</td>
-									<td>{{ $icd->diagnosaICD }}</td>
-								</tr>
-							@endforeach
-						@else
-							<tr>
-								<td colspan="">
-									{!! Form::open(['url' => 'home/icds/imports', 'method' => 'post', 'files' => 'true']) !!}
-										<div class="form-group">
-											{!! Form::label('file', 'Data tidak ditemukan, upload data?') !!}
-											{!! Form::file('file') !!}
-											{!! Form::submit('Upload', ['class' => 'btn btn-primary', 'id' => 'submit']) !!}
-										</div>
-									{!! Form::close() !!}
-								</td>
-							</tr>
-						@endif
-					</tbody>
+					<tbody id="ajax_container"></tbody>
 				</table>
-				{{ $icds->links() }}
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div id="page-box">
+							<nav class="text-right" aria-label="Page navigation" id="paging">
+							
+							</nav>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 @stop
 @section('footer') 
-	
+	<script src="{!! url('js/twbs-pagination/jquery.twbsPagination.min.js') !!}"></script>
+	{!! HTML::script('js/icd.js')!!}
 @stop
 

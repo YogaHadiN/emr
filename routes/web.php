@@ -26,6 +26,11 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::resource('home/stafs', 'StafController');
 	Route::get('home/generiks/search/ajax', 'GenerikController@searchAjax');
 	Route::get('/home/obats/search/ajax', 'ObatController@searchAjax');
+	Route::get('/home/aturan_minum/search/ajax', 'AturanMinumController@searchAjax');
+	Route::get( '/home/signa/search/ajax', 'SignaController@searchAjax');
+	Route::get( '/home/coa/search/ajax', 'CoaController@searchAjax');
+	Route::get( '/home/tarifs/search/ajax', 'TarifController@searchAjax');
+	Route::get( '/home/icds/search/ajax', 'IcdController@searchAjax');
 
 	Route::resource('home/generiks', 'GenerikController');
 	Route::get('home/terapis/jenis_obat_standar', 'ObatController@jenisObatStandar');

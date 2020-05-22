@@ -11,10 +11,7 @@ use DB;
 class AturanMinumController extends Controller
 {
 	public function index(){
-		$aturan_minums = AturanMinum::paginate(15);
-		return view('aturan_minums.index', compact(
-			'aturan_minums'
-		));
+		return view('aturan_minums.index');
 	}
 	public function create(){
 		return view('aturan_minums.create');
@@ -86,4 +83,41 @@ class AturanMinumController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$aturan_minum   = Input::get('aturan_minum');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($aturan_minum, $displayed_rows, $key);
+		$count          = $this->queryData($aturan_minum, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($aturan_minum,$displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "id, ";
+			$query .= "aturan_minum ";
+		} else {
+			$query .= "count(id) as jumlah ";
+		}
+		$query .= "FROM aturan_minums ";
+		$query .= "WHERE ";
+		$query .= "(aturan_minum like '%{$aturan_minum}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

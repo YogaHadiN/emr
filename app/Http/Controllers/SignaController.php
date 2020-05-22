@@ -86,4 +86,41 @@ class SignaController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$signa   = Input::get('signa');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($signa, $displayed_rows, $key);
+		$count          = $this->queryData($signa, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($signa,$displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "id, ";
+			$query .= "signa ";
+		} else {
+			$query .= "count(id) as jumlah ";
+		}
+		$query .= "FROM signas ";
+		$query .= "WHERE ";
+		$query .= "(signa like '%{$signa}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

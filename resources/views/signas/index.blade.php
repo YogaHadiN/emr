@@ -21,15 +21,32 @@ Online Electronic Medical Record | Signa
 		<a class="btn btn-primary" href="{{ url('home/signas/create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Buat Signa</a>
 	</div>
 			<div class="table-responsive">
+				<div class="row">
+					<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+						Menampilkan <span id="rows"></span> hasil
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 padding-bottom">
+						{!! Form::select('displayed_rows', App\Yoga::manyRows(), 15, [
+							'class' => 'form-control',
+							'onchange' => 'clearAndSelect();return false;',
+							'id'    => 'displayed_rows'
+						]) !!}
+					</div>
+				</div>
 				<table class="table table-hover table-condensed table-bordered">
 					<thead>
 						<tr>
 							<th width="10%">ID Pasien</th>
-							<th>Signa</th>
+							<th>Signa
+								{!! Form::text('signa', null, [
+									'id'      => 'signa' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="ajax_container">
 						@if($signas->count() > 0)
 							@foreach($signas as $signa)
 								<tr>
@@ -55,6 +72,7 @@ Online Electronic Medical Record | Signa
 			{{ $signas->links() }}
 @stop
 @section('footer') 
-	
+	<script src="{!! url('js/twbs-pagination/jquery.twbsPagination.min.js') !!}"></script>
+	{!! HTML::script('js/signa.js')!!}
 @stop
 

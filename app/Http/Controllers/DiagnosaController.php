@@ -11,10 +11,7 @@ use DB;
 class DiagnosaController extends Controller
 {
 	public function index(){
-		$diagnosas = Diagnosa::paginate(15);
-		return view('diagnosas.index', compact(
-			'diagnosas'
-		));
+		return view('diagnosas.index');
 	}
 	public function create(){
 		return view('diagnosas.create');
@@ -85,4 +82,48 @@ class DiagnosaController extends Controller
 			return \Redirect::back()->withErrors($validator)->withInput();
 		}
 	}
+	public function searchAjax(){
+		$diagnosa       = Input::get('diagnosa');
+		$diagnosaICD    = Input::get('diagnosaICD');
+		$icd_id         = Input::get('icd_id');
+		$displayed_rows = Input::get('displayed_rows');
+		$key            = Input::get('key');
+		$data           = $this->queryData($diagnosa, $diagnosaICD, $icd_id, $displayed_rows, $key);
+		$count          = $this->queryData($diagnosa, $diagnosaICD, $icd_id, $displayed_rows, $key, true)[0]->jumlah;
+		$pages          = ceil( $count/ $displayed_rows );
+
+		return [
+			'data'  => $data,
+			'pages' => $pages,
+			'key'   => $key,
+			'rows'  => $count
+		];
+	}
+	private function queryData($diagnosa, $diagnosaICD, $icd_id, $displayed_rows, $key, $count = false){
+		$pass = $key * $displayed_rows;
+
+		$query  = "SELECT ";
+		if (!$count) {
+			$query .= "id, ";
+			$query .= "icd_id, ";
+			$query .= "diagnosa, ";
+			$query .= "diagnosaICD ";
+		} else {
+			$query .= "count(dg.id) as jumlah ";
+		}
+		$query .= "FROM diagnosas as dg ";
+		$query .= "JOIN icds as ic on ic.id = dg.icd_id ";
+		$query .= "WHERE ";
+		$query .= "(diagnosaICD like '%{$diagnosaICD}%') ";
+		$query .= "(diagnosa like '%{$diagnosa}%') ";
+		$query .= "(icd_id like '%{$icd_id}%') ";
+		/* $query .= "GROUP BY p.id "; */
+		$query .= "ORDER BY dg.created_at DESC ";
+
+		if (!$count) {
+			$query .= "LIMIT {$pass}, {$displayed_rows} ";
+		}
+		return DB::select($query);
+	}
+	
 }

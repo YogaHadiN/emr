@@ -25,47 +25,50 @@ Online Electronic Medical Record | Diagnosa
 		</div>
 		<div class="panel-body">
 			<div class="table-responsive">
+				<div class="row">
+					<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+						Menampilkan <span id="rows"></span> hasil
+					</div>
+					<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 padding-bottom">
+						{!! Form::select('displayed_rows', App\Yoga::manyRows(), 15, [
+							'class' => 'form-control',
+							'onchange' => 'clearAndSelect();return false;',
+							'id'    => 'displayed_rows'
+						]) !!}
+					</div>
+				</div>
 				<table class="table table-hover table-condensed table-bordered">
 					<thead>
 						<tr>
 							<th>ID</th>
-							<th>Nama Diagnosa</th>
-							<th>ICD 10</th>
-							<th>Diagnosa ICD</th>
+							<th>Nama Diagnosa
+								{!! Form::text('diagnosa', null, [
+									'id'      => 'diagnosa' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
+							<th>ICD 10
+								{!! Form::text('icd_id', null, [
+									'id'      => 'icd_id' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
+							<th>Diagnosa ICD
+								{!! Form::text('diagnosaICD', null, [
+									'id'      => 'diagnosaICD' ,
+									'class'   => 'form-control ajaxselect'
+								]) !!}
+							</th>
 						</tr>
 					</thead>
-					<tbody>
-						@if($diagnosas->count() > 0)
-							@foreach($diagnosas as $diagnosa)
-
-								<tr>
-									<td>{{ $diagnosa->id }}</td>
-									<td>{{ $diagnosa->diagnosa }}</td>
-									<td>{{ $diagnosa->icd_id }}</td>
-									<td>{{ $diagnosa->icd->diagnosaICD }}</td>
-								</tr>
-							@endforeach
-						@else
-							<tr>
-								<td colspan="">
-									{!! Form::open(['url' => 'home/diagnosas/imports', 'method' => 'post', 'files' => 'true']) !!}
-										<div class="form-group">
-											{!! Form::label('file', 'Data tidak ditemukan, upload data?') !!}
-											{!! Form::file('file') !!}
-											{!! Form::submit('Upload', ['class' => 'btn btn-primary', 'id' => 'submit']) !!}
-										</div>
-									{!! Form::close() !!}
-								</td>
-							</tr>
-						@endif
-					</tbody>
+					<tbody id='ajax_container'></tbody>
 				</table>
-				{{ $diagnosas->links() }}
 			</div>
 		</div>
 	</div>
 @stop
 @section('footer') 
-	
+	<script src="{!! url('js/twbs-pagination/jquery.twbsPagination.min.js') !!}"></script>
+	{!! HTML::script('js/diagnosa.js')!!}
 @stop
 
