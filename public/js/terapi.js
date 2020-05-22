@@ -550,10 +550,12 @@ function editRacikan(i) {
 	viewResep();
 }
 function showSignaTab() {
-	$('.show_tab_signa').tab('show');
+	activaTab('signa_tab');
+	$('#signa_text').focus();
 }
 function showAturanMinumTab() {
-	$('.show_tab_aturan_minum').tab('show');
+	activaTab('aturan_minum_tab');
+	$('#aturan_minum_text').focus();
 }
 function signaSearch(control) {
 	$.get(base + '/home/terapis/signa/ajax/search',
@@ -600,7 +602,7 @@ function submitAturanMinum(control) {
 				setValueSelect2( $('#aturan_minum'), aturan_minum_text,data);
 				$('#aturan_minum_text').val('');
 				activaTab('status');
-				$('#aturan_minum').select2('focus');
+				$('#inputButtonResep').focus();
 			}
 		}
 	);

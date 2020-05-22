@@ -33,6 +33,7 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::get( '/home/icds/search/ajax', 'IcdController@searchAjax');
 	Route::get( '/home/diagnosas/search/ajax', 'DiagnosaController@searchAjax');
 	Route::get('home/terapis/aturan_minum/cari', 'TerapiController@aturanMinumSearch');
+	Route::get('home/terapis/signa/cari', 'TerapiController@signaSearch');
 	Route::post( '/home/terapis/create/signa', 'TerapiController@createSigna');
 	Route::post( '/home/terapis/create/aturan_minum', 'TerapiController@createAturanMinum');
 

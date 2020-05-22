@@ -89,9 +89,19 @@
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-								<button class="btn btn-success btn-sm btn-block" onclick="inputResep(this);return false;" type="button">Input</button>
+								<button class="btn btn-success btn-sm btn-block" id="inputButtonResep" onclick="inputResep(this);return false;" type="button">Input</button>
 							</div>
 						</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<a href="" onclick="showSignaTab();return false;">Tidak dapat menemukan Signa?</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<a href="" onclick="showAturanMinumTab();return false;">Tidak dapat menemukan Aturan Minum?</a>
+								</div>
+							</div>
 					</div>
 				</div>
 			</div>

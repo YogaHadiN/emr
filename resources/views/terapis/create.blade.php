@@ -64,6 +64,5 @@
 </div>
 @stop
 @section('footer') 
-    {{-- <script src="{!! url('js/dropdownBelowSelect2.js') !!}"></script> --}}
     <script src="{!! url('js/terapi.js') !!}"></script>
 @stop

@@ -331,12 +331,12 @@ class TerapiController extends Controller
 		return  DB::select($query);
 	}
 	public function createSigna(){
-		$signa = Input::get('signa');
+		$param = Input::get('param');
 		try {
 			return Signa::where('signa', trim($signa))->firstOrFail()->id;
 		} catch (\Exception $e) {
-			$signa       = new Signa;
-			$signa->signa   = $signa;
+			$signa        = new Signa;
+			$signa->signa = $param;
 			if ($signa->save()) {
 				return $signa->id;
 			}
