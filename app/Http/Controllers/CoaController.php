@@ -115,7 +115,6 @@ class CoaController extends Controller
 		$query .= "WHERE ";
 		$query .= "(coa like '%{$coa}%') ";
 		$query .= "AND (kelompok_coa like '%{$kelompok_coa}%') ";
-		$query .= "GROUP BY co.id ";
 		$query .= "ORDER BY co.created_at DESC ";
 
 		if (!$count) {

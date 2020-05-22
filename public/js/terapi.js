@@ -580,9 +580,28 @@ function submitSigna(control) {
 	$.post(base + '/home/terapis/create/signa',
 		{ param: signa_text },
 		function (data, textStatus, jqXHR) {
-			// buat signa dan aturan minum jadi ajax
-			// focus ke signa
-			// tab kembali ke status
+			data = $.trim(data);
+			if (data != '') {
+				setValueSelect2( $('#signa'), signa_text,data);
+				$('#signa_text').val('');
+				activaTab('status');
+				$('#signa').select2('focus');
+			}
+		}
+	);
+}
+function submitAturanMinum(control) {
+	var aturan_minum_text = $('#aturan_minum_text').val();
+	$.post(base + '/home/terapis/create/aturan_minum',
+		{ aturan_minum: aturan_minum_text },
+		function (data, textStatus, jqXHR) {
+			data = $.trim(data);
+			if (data != '') {
+				setValueSelect2( $('#aturan_minum'), aturan_minum_text,data);
+				$('#aturan_minum_text').val('');
+				activaTab('status');
+				$('#aturan_minum').select2('focus');
+			}
 		}
 	);
 }

@@ -554,3 +554,6 @@ function isNumber(evt) {
 function isEmpty(value){
   return (value == null || value.length === 0);
 }
+function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};

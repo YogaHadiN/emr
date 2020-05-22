@@ -38,8 +38,9 @@
 
 			  <!-- Nav tabs -->
 			  <ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab">Status</a></li>
-				<li role="presentation"><a href="#signa_tab" aria-controls="signa_tab" role="tab" data-toggle="tab">Buat Signa</a></li>
+				<li role="presentation" class="active"><a class="show_tab_status" href="#status" aria-controls="status" role="tab" data-toggle="tab">Status</a></li>
+				<li role="presentation"><a href="#signa_tab" class="show_tab_signa" aria-controls="signa_tab" role="tab" data-toggle="tab">Buat Signa</a></li>
+				<li role="presentation"><a href="#aturan_minum_tab" class="show_tab_aturan_minum" aria-controls="aturan_minum_tab" role="tab" data-toggle="tab">Buat Aturan Minum</a></li>
 			  </ul>
 
 			  <!-- Tab panes -->
@@ -48,7 +49,10 @@
 					@include('terapis.info')
 				</div>
 				<div role="tabpanel" class="tab-pane" id="signa_tab">
-					@include('terapis.signaInput')
+					@include('terapis.signaInput', ['table' => 'signa'])
+				</div>
+				<div role="tabpanel" class="tab-pane" id="aturan_minum_tab">
+					@include('terapis.signaInput', ['table' => 'aturan_minum'])
 				</div>
 			  </div>
 

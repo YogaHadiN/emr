@@ -330,4 +330,29 @@ class TerapiController extends Controller
 		$query .= "LIMIT 10";
 		return  DB::select($query);
 	}
+	public function createSigna(){
+		$signa = Input::get('signa');
+		try {
+			return Signa::where('signa', trim($signa))->firstOrFail()->id;
+		} catch (\Exception $e) {
+			$signa       = new Signa;
+			$signa->signa   = $signa;
+			if ($signa->save()) {
+				return $signa->id;
+			}
+		}
+	}
+	public function createAturanMinum(){
+		$aturan_minum = Input::get('aturan_minum');
+		try {
+			return AturanMinum::where('aturan_minum', trim($aturan_minum))->firstOrFail()->id;
+		} catch (\Exception $e) {
+			$AturanMinum               = new AturanMinum;
+			$AturanMinum->aturan_minum = $aturan_minum;
+			if ($AturanMinum->save()) {
+				return $AturanMinum->id;
+			}
+		}
+	}
+	
 }

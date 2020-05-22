@@ -104,8 +104,8 @@ class DiagnosaController extends Controller
 
 		$query  = "SELECT ";
 		if (!$count) {
-			$query .= "id, ";
-			$query .= "icd_id, ";
+			$query .= "ic.id as icd_id, ";
+			$query .= "dg.id as id, ";
 			$query .= "diagnosa, ";
 			$query .= "diagnosaICD ";
 		} else {
@@ -115,14 +115,15 @@ class DiagnosaController extends Controller
 		$query .= "JOIN icds as ic on ic.id = dg.icd_id ";
 		$query .= "WHERE ";
 		$query .= "(diagnosaICD like '%{$diagnosaICD}%') ";
-		$query .= "(diagnosa like '%{$diagnosa}%') ";
-		$query .= "(icd_id like '%{$icd_id}%') ";
+		$query .= "AND (diagnosa like '%{$diagnosa}%') ";
+		$query .= "AND (icd_id like '%{$icd_id}%') ";
 		/* $query .= "GROUP BY p.id "; */
-		$query .= "ORDER BY dg.created_at DESC ";
+		/* $query .= "ORDER BY dg.created_at DESC "; */
 
 		if (!$count) {
 			$query .= "LIMIT {$pass}, {$displayed_rows} ";
 		}
+
 		return DB::select($query);
 	}
 	

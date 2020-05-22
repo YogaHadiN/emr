@@ -1,12 +1,16 @@
 searchAjax();
+var key;
+var pages;
 function searchAjax(key = 0) {
 
-	var diagnosICD     = $('#diagnosICD').val();
+	var diagnosaICD    = $('#diagnosaICD').val();
+	var diagnosa       = $('#diagnosa').val();
+	var icd_id         = $('#icd_id').val();
 	var displayed_rows = $('#displayed_rows').val();
 
-	$.get(base + '/home/icds/search/ajax',
+	$.get(base + '/home/diagnosas/search/ajax',
 		{
-			'diagnosaICD':    diagnosICD,
+			'diagnosaICD':    diagnosaICD,
 			'icd_id':         icd_id,
 			'diagnosa':       diagnosa,
 			'displayed_rows': displayed_rows,
@@ -37,8 +41,9 @@ function searchAjax(key = 0) {
 					temp += '</tr>';
 				}
 			} else {
+				var colspan = $('#ajax_container').closest('table').find('th').length;
 				temp += '<tr>';
-				temp += '<td colspan="4" class="text-center">';
+				temp += '<td colspan="' + colspan + '" class="text-center">';
 				temp += 'Tidak ada data untuk ditampilkan'
 				temp += '</td>';
 				temp += '</tr>';

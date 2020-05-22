@@ -35,8 +35,9 @@ function searchAjax(key = 0) {
 					temp += '</tr>';
 				}
 			} else {
+				var colspan = $('#ajax_container').closest('table').find('th').length;
 				temp += '<tr>';
-				temp += '<td colspan="4" class="text-center">';
+				temp += '<td colspan="' + colspan + '" class="text-center">';
 				temp += 'Tidak ada data untuk ditampilkan'
 				temp += '</td>';
 				temp += '</tr>';

@@ -94,8 +94,9 @@ function searchAjax(key = 0) {
 					console.log(i < len);
 				}
 			} else {
+				var colspan = $('#ajax_container').closest('table').find('th').length;
 				temp += '<tr>';
-				temp += '<td colspan="5" class="text-center">';
+				temp += '<td colspan="' + colspan + '" class="text-center">';
 				temp += 'Tidak ada data untuk ditampilkan'
 				temp += '</td>';
 				temp += '</tr>';

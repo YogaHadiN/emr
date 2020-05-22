@@ -31,6 +31,10 @@ Route::group(['middleware' => ['verified']], function () {
 	Route::get( '/home/coa/search/ajax', 'CoaController@searchAjax');
 	Route::get( '/home/tarifs/search/ajax', 'TarifController@searchAjax');
 	Route::get( '/home/icds/search/ajax', 'IcdController@searchAjax');
+	Route::get( '/home/diagnosas/search/ajax', 'DiagnosaController@searchAjax');
+	Route::get('home/terapis/aturan_minum/cari', 'TerapiController@aturanMinumSearch');
+	Route::post( '/home/terapis/create/signa', 'TerapiController@createSigna');
+	Route::post( '/home/terapis/create/aturan_minum', 'TerapiController@createAturanMinum');
 
 	Route::resource('home/generiks', 'GenerikController');
 	Route::get('home/terapis/jenis_obat_standar', 'ObatController@jenisObatStandar');

@@ -360,51 +360,60 @@
                 var pages = hasil.pages;
                 var rows = hasil.rows;
                 var temp = "";
-                 for (var i = 0; i < MyArray.length; i++) {
-                    temp += "<tr>";
-                    if(DDID_PASIEN){
-                        temp += "<td nowrap class='displayNone'><div>" + MyArray[i].ID_PASIEN + "</div></td>";
-                    } else {
-                        temp += "<td nowrap class=''><div>" + MyArray[i].ID_PASIEN + "</div></td>";
-                    }
-                    temp += "<td nowrap><div>" + caseNama( MyArray[i].namaPasien ) + "</div></td>";
-                    temp += "<td class='kolom_2'><div>" + caseNama( MyArray[i].alamat ) + "</div></td>";
-                    temp += "<td nowrap class='kolom_3'><div>" + MyArray[i].tanggalLahir + "</div></td>";
-                    temp += "<td nowrap><div>" + MyArray[i].noTelp + "</div></td>";
-                    if(DDID_ASURANSI){
-                        temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaAsuransi ) + "</div></td>";
-                    } else {
-                        temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaAsuransi ) + "</div></td>";
-                    }
-                    if(DDnomorAsuransi){
-                        temp += "<td nowrap class='displayNone'><div>" + MyArray[i].nomorAsuransi + "</div></td>";
-                    } else {
-                        temp += "<td nowrap class=''><div>" + MyArray[i].nomorAsuransi + "</div></td>";
-                    }
-                    if(DDnamaPeserta){
-                        temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaPeserta ) + "</div></td>";
-                    } else{
-                        temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaPeserta ) + "</div></td>";
-                    }
-                    if(DDnamaIbu){
-                        temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaIbu ) + "</div></td>";
-                    } else {
-                        temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaIbu ) + "</div></td>";
-                    }
-                    if(DDnamaAyah){
-                        temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaAyah ) + "</div></td>";
-                    } else {
-                        temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaAyah ) + "</div></td>";
-                    }
+				if (MyArray.length > 0) {
+					 for (var i = 0; i < MyArray.length; i++) {
+						temp += "<tr>";
+						if(DDID_PASIEN){
+							temp += "<td nowrap class='displayNone'><div>" + MyArray[i].ID_PASIEN + "</div></td>";
+						} else {
+							temp += "<td nowrap class=''><div>" + MyArray[i].ID_PASIEN + "</div></td>";
+						}
+						temp += "<td nowrap><div>" + caseNama( MyArray[i].namaPasien ) + "</div></td>";
+						temp += "<td class='kolom_2'><div>" + caseNama( MyArray[i].alamat ) + "</div></td>";
+						temp += "<td nowrap class='kolom_3'><div>" + MyArray[i].tanggalLahir + "</div></td>";
+						temp += "<td nowrap><div>" + MyArray[i].noTelp + "</div></td>";
+						if(DDID_ASURANSI){
+							temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaAsuransi ) + "</div></td>";
+						} else {
+							temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaAsuransi ) + "</div></td>";
+						}
+						if(DDnomorAsuransi){
+							temp += "<td nowrap class='displayNone'><div>" + MyArray[i].nomorAsuransi + "</div></td>";
+						} else {
+							temp += "<td nowrap class=''><div>" + MyArray[i].nomorAsuransi + "</div></td>";
+						}
+						if(DDnamaPeserta){
+							temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaPeserta ) + "</div></td>";
+						} else{
+							temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaPeserta ) + "</div></td>";
+						}
+						if(DDnamaIbu){
+							temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaIbu ) + "</div></td>";
+						} else {
+							temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaIbu ) + "</div></td>";
+						}
+						if(DDnamaAyah){
+							temp += "<td nowrap class='displayNone'><div>" + caseNama( MyArray[i].namaAyah ) + "</div></td>";
+						} else {
+							temp += "<td nowrap class=''><div>" + caseNama( MyArray[i].namaAyah ) + "</div></td>";
+						}
 
-                    temp += "<td nowrap class='displayNone'><div>" + MyArray[i].asuransi_id + "</div></td>";
-                    temp += "<td nowrap class='displayNone'><div>" + MyArray[i].image + "</div></td>";
-                    temp += "<td nowrap nowrap><div><a href=\"" +url+"/home/pasiens/" + MyArray[i].ID_PASIEN +"/daftar\" style=\"color: green; font-size: large;\"><span class=\"glyphicon glyphicon-log-in\" aria-hidden=\"true\"></span></a>";
-                    temp += "&nbsp;&nbsp;&nbsp;<a href=\"" + base + "/home/pasiens/" + MyArray[i].ID_PASIEN + "/edit\" style=\"color: ##337AB7; font-size: large;\"><span aria-hidden=\"true\" class=\"glyphicon glyphicon-edit\"></span></a>";
-                    temp += "&nbsp;&nbsp;&nbsp;<a data-value='" + MyArray[i].ID_PASIEN + "' href='" + base + "/home/pasiens/" + MyArray[i].ID_PASIEN + "/riwayat' style=\"color: orange; font-size: large;\" ><span class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span></a> </td>";
-         
-                    temp += "</tr>";
-                 }
+						temp += "<td nowrap class='displayNone'><div>" + MyArray[i].asuransi_id + "</div></td>";
+						temp += "<td nowrap class='displayNone'><div>" + MyArray[i].image + "</div></td>";
+						temp += "<td nowrap nowrap><div><a href=\"" +url+"/home/pasiens/" + MyArray[i].ID_PASIEN +"/daftar\" style=\"color: green; font-size: large;\"><span class=\"glyphicon glyphicon-log-in\" aria-hidden=\"true\"></span></a>";
+						temp += "&nbsp;&nbsp;&nbsp;<a href=\"" + base + "/home/pasiens/" + MyArray[i].ID_PASIEN + "/edit\" style=\"color: ##337AB7; font-size: large;\"><span aria-hidden=\"true\" class=\"glyphicon glyphicon-edit\"></span></a>";
+						temp += "&nbsp;&nbsp;&nbsp;<a data-value='" + MyArray[i].ID_PASIEN + "' href='" + base + "/home/pasiens/" + MyArray[i].ID_PASIEN + "/riwayat' style=\"color: orange; font-size: large;\" ><span class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span></a> </td>";
+			 
+						temp += "</tr>";
+					 }
+				} else {
+					var colspan = $('#ajax').closest('table').find('th:visible').length;
+					temp += '<tr>';
+					temp += '<td colspan="' + colspan + '" class="text-center">';
+					temp += 'Tidak ada data untuk ditampilkan'
+					temp += '</td>';
+					temp += '</tr>';
+				}
                  $('#ajax').html(temp);
 				$('#paging').twbsPagination({
 					startPage: parseInt(key) +1,
