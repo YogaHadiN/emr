@@ -557,3 +557,6 @@ function isEmpty(value){
 function activaTab(tab){
     $('.nav-tabs a[href="#' + tab + '"]').tab('show');
 };
+function isset(selector) {
+	return typeof selector !== 'undefined';
+}

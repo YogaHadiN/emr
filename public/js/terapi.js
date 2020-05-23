@@ -99,7 +99,7 @@ function collectData(){
 		'tipe_resep_id':     $('#tipe_resep').val(),
 		'standar_text':      $('#tipe_resep option:selected').text(),
 		'obat_id':           $('#nama_obat_ajax_search').val(),
-		'obat_text':         $('#nama_obat_ajax_search').text(),
+		'obat_text':         $('#nama_obat_ajax_search').select2('data')[0].text,
 		'signa_id':          $('#signa').val(),
 		'signa_text':        $('#signa option:selected').text(),
 		'aturan_minum_id':   $('#aturan_minum').val(),
@@ -267,19 +267,19 @@ function endPuyer(){
 	$('#selesaikanPuyer').fadeOut('slow');
 	setValueNamaObatThenReadOnly('Kertas Puyer Biasa', 1);
 	$('#signa').empty();
-	$('#signa').fadeIn('slow');
+	$('#signa').closest('.form-group').fadeIn('slow');
 	$('#aturan_minum').empty();
-	$('#aturan_minum').fadeIn('slow');
+	$('#aturan_minum').closest('.form-group').fadeIn('slow');
 	$('#jumlah').val('').focus();
 }
 
 function endAdd(){
-	$('#selesaikanAdd').fadeOut('slow');
+	hideElement( $('#selesaikanAdd') );
 	setValueNamaObatThenReadOnly('Add Sirup', 2);
 	$('#signa').empty();
-	$('#signa').fadeIn('slow');
+	showForm( $('#signa') )
 	$('#aturan_minum').empty();
-	$('#aturan_minum').fadeIn('slow');
+	showForm( $('#aturan_minum') )
 	$('#jumlah').val('0').fadeOut('slow');
 	$('#signa').select2('open');
 
@@ -359,10 +359,9 @@ function gantiSeleksiAdd(){
 			}
 		});
 	}
-	 // $('#tipe_resep').val('2');
+	$('#nama_obat_ajax_search').empty();
 	if (!obatAdd) {
 		obatAdd = true;
-		$('#nama_obat_ajax_search').empty();
 		url_param = base + '/terapis/obat/cari/ajax/add'; 
 	}
 
@@ -449,33 +448,24 @@ function kembaliResepStandar() {
 	$('#selesaikanAdd').fadeOut('slow');
 	$('#nama_obat_ajax_search').val('2').selectpicker('refresh').closest('.form-group').fadeOut('slow');
 	$('#signa').empty();
-	$('#signa').fadeIn('slow');
+	showForm( $('#signa') );
 	$('#aturan_minum').empty();
-	$('#aturan_minum').fadeIn('slow');
+	showForm( $('#aturan_minum') );
 	$('#jumlah').val('0').fadeOut('slow');
 	$('#signa').select2('open');
 }
 
 function kembaliKeStandar() {
-	if ( $('#kembaliResepStandar').is(':visible') ) {
-		$('#kembaliResepStandar').fadeOut('slow');
-	}
-	if ( $('#selesaikanAdd').is(':visible') ) {
-		$('#selesaikanAdd').fadeOut('slow');
-	}
-	if ( $('#selesaikanPuyer').is(':visible') ) {
-		$('#selesaikanPuyer').fadeOut('slow');
-	}
+	$('#nama_obat_ajax_search').empty();
+	hideElement( $('#kembaliResepStandar') );
+	hideElement( $('#selesaikanAdd') );
+	hideElement( $('#selesaikanPuyer') );
 	$('#tipe_resep').val('1').selectpicker('refresh');
-	$('#tipe_resep').closest('.form-group').fadeIn('slow');
+	showForm( $('#tipe_resep'));
 	$('#signa').empty();
-	if ( $('#signa').closest('.form-group').is(':hidden') ) {
-		$('#signa').closest('.form-group').fadeIn('slow');
-	}
+	showForm( $('#signa') );
 	$('#aturan_minum').empty();
-	if ( $('#aturan_minum').closest('.form-group').is(':hidden') ) {
-		$('#aturan_minum').closest('.form-group').fadeIn('slow');
-	}
+	showForm( $('#aturan_minum') );
 	if ( $('#jumlah').is(':hidden')) {
 		$('#jumlah').fadeIn('slow');
 	}
@@ -520,8 +510,8 @@ function changeStatusButton() {
 	}
 }
 function setValueNamaObatThenReadOnly( text_select, i ){
-	selector.append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
-	$("#nama_obat_ajax_search").val(i).trigger('change');
+	$('#nama_obat_ajax_search').append('<option selected="selected" value="'+i+'">' + text_select + '</option>');
+	$('#nama_obat_ajax_search').val(i).trigger('change');
 	$('#nama_obat_ajax_search').attr('disabled', 'disabled').trigger('change');
 }
 function setValueSelect2( selector, text_select, i ){
@@ -529,25 +519,47 @@ function setValueSelect2( selector, text_select, i ){
 	selector.val(i).trigger('change');
 }
 function editRacikan(i) {
-	rowDelete = true;
-	data            = [];
-	// ambil baris array dengan tipe_resep yang sama mulai dari baris tombol ditekan ke atas
-	while ( array[i]['tipe_resep_id'] == '3' ) {
-		data.push(array[i]);
-		i--;
+	if (add || puyer) {
+		alert('Tidak bisa edit racikan lain sebelum racikan yang ada selesai');
+	} else {
+
+		rowDelete = true;
+		data            = [];
+		// ambil baris array dengan tipe_resep yang sama mulai dari baris tombol ditekan ke atas
+		var n = array[i].tipe_resep_id;
+		if (array[i].tipe_resep_id ==n) {
+			while (
+				array[i].tipe_resep_id ==n
+
+			) {
+				data.push(array[i]);
+				i--;
+				if ( i < 0 ) {
+					break;
+				}
+
+				if (
+					array[i].obat_id == '1' ||
+					array[i].obat_id == '2' ||
+					array[i].obat_id == '3'
+				) {
+						break;
+					}
+				}
+			// sebelum data dimasukkan, hapus dulu baris array yang akan dipindah
+			array.splice(i + 1, data.length);
+			// balik array sehingga baris array tombol yang ditekan menjadi yang terakhir lagi
+			data.reverse();
+			// hapus baris array tombol yang ditekan untuk menampilkan form racikan
+			data.splice(data.length - 1, 1);
+			// masukkan data ke array baris terakhir berurutan
+			for (var i = 0, len = data.length; i < len; i++) {
+				array.push(data[i]);
+			}
+			//tampilkan view
+			viewResep();
+		}
 	}
-	// sebelum data dimasukkan, hapus dulu baris array yang akan dipindah
-	array.splice(i + 1, data.length);
-	// balik array sehingga baris array tombol yang ditekan menjadi yang terakhir lagi
-	data.reverse();
-	// hapus baris array tombol yang ditekan untuk menampilkan form racikan
-	data.splice(data.length - 1, 1);
-	// masukkan data ke array baris terakhir berurutan
-	for (var i = 0, len = data.length; i < len; i++) {
-		array.push(data[i]);
-	}
-	//tampilkan view
-	viewResep();
 }
 function showSignaTab() {
 	activaTab('signa_tab');
@@ -606,4 +618,27 @@ function submitAturanMinum(control) {
 			}
 		}
 	);
+}
+function showForm(selector) {
+	if ( selector.closest('.form-group').is(':hidden') ) {
+		selector.closest('.form-group').fadeIn('slow');
+	}
+}
+function hideForm(selector) {
+	if ( selector.closest('.form-group').is(':visible') ) {
+		selector.closest('.form-group').fadeOut('slow');
+	}
+}
+function showElement(selector) {
+	if ( selector.is(':hidden') ) {
+		selector.fadeIn('slow');
+	}
+}
+function hideElement(selector) {
+	if ( selector.is(':visible') ) {
+		selector.fadeOut('slow');
+	}
+}
+function whileEditRacikan(n) {
+	
 }
