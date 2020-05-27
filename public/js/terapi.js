@@ -152,8 +152,13 @@ function viewResep(){
 			temp += '<td></td>';
 			temp += '<td style="border-bottom:1px solid #000;">Buat menjadi ' + array[i].jumlah + ' puyer</td>';
 			temp += '<td style="border-bottom:1px solid #000;">' + array[i].aturan_minum_text+ '</td>';
-			temp += '<td><button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button>';
-			temp += '<button type="button" onclick="editRacikan(' + i + ');return false;" class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span	</button></td>';
+			temp += '<td>';
+			if (i == ( array.length -1 )) {
+				temp += '<button type="button" onclick="rowDel(' + i + ');return false;" class="btn btn-danger btn-xs"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span	</button>';
+			} else {
+				temp += '<button type="button" onclick="editRacikan(' + i + ');return false;" class="btn btn-warning btn-xs editRacikan"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span	</button>';
+			}
+			temp += '</td>';
 			temp += '</tr>';
 		} else if ( array[i].tipe_resep_id == '3' && ( isset( array[i-1] ) && array[i-1].tipe_resep_id == '3' )){
 			kondisikanSeleksiPuyer();

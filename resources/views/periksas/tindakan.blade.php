@@ -11,7 +11,7 @@
 		{!! Form::text('keterangan_tindakans[]', $keterangan, ['class' => 'form-control']) !!}
 	</td>
 	<td class="action">
-		@if( isset($tindakan) && isset($k) && $k == count($tindakans) -1  )
+		@if( isset($tindakan) && isset($k) && $k == count($tindakans) -1 && $k > 0  )
 			<button class="btn btn-danger btn-sm" type="button" onclick="rowDel(this);return false;"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
 		@else
 			<button class="btn btn-primary btn-sm" type="button" onclick="addTindakan(this);return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>

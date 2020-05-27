@@ -123,6 +123,7 @@ class DiagnosaController extends Controller
 		if (!$count) {
 			$query .= "LIMIT {$pass}, {$displayed_rows} ";
 		}
+		/* dd( $query ); */
 
 		return DB::select($query);
 	}
